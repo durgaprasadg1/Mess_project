@@ -1,5 +1,4 @@
 <style>
-  /* Navbar base */
   .navbar {
     background: #ffffff !important;
     border-bottom: 1px solid #e9ecef;
@@ -7,7 +6,6 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 
-  /* Brand */
   .navbar-brand {
     font-weight: 700;
     font-size: 1.6rem;
@@ -26,7 +24,6 @@
     color: #084298 !important;
   }
 
-  /* Nav links */
   .nav-link {
     font-weight: 500;
     margin: 0 8px;
@@ -40,7 +37,6 @@
     color: #0d6efd !important;
   }
 
-  /* Search box */
   .search-box {
     display: flex;
     align-items: center;
@@ -76,7 +72,6 @@
     transform: scale(1.1);
   }
 
-  /* User info */
   .user-info {
     display: flex;
     align-items: center;
@@ -96,7 +91,6 @@
     color: #212529;
   }
 
-  /* Responsive tweaks */
   @media (max-width: 768px) {
     #search-input {
       width: 120px;
@@ -150,10 +144,9 @@
         <% } %>
       </ul>
 
-      <!-- Search -->
-      <form class="d-flex mx-3" role="search">
+      <form class="d-flex mx-3" method="get" action="/mess/search">
         <div class="search-box">
-          <input type="search" placeholder="Search Mess..." id="search-input" />
+          <input type="search" name="search" placeholder="Search Mess..." id="search-input" />
           <button class="btn-search" type="submit">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
