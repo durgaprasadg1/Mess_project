@@ -44,7 +44,11 @@ const messSchema = Schema({
     type  : String,
     required: true,
     minLength:2
-  }
+  },
+  favourites:[{
+        type : String, 
+        default : ""
+  }],
 });
 
 // on Delete Cascade \/

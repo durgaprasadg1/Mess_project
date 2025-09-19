@@ -27,7 +27,6 @@ module.exports.addNewMess = async(req,res)=>{
 module.exports.searchMess =  async (req, res) => {
   try {
     const { search } = req.query;
-
     if (!search) {
       req.flash("error", "Please enter something to search");
       return res.redirect("/mess");
