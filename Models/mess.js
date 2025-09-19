@@ -40,6 +40,11 @@ const messSchema = Schema({
     type: Schema.Types.ObjectId,
     ref: "Order"
   }],
+  category : {
+    type  : String,
+    required: true,
+    minLength:2
+  }
 });
 
 // on Delete Cascade \/

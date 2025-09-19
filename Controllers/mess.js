@@ -12,8 +12,8 @@ module.exports.newMessForm =  (req,res)=>{
 module.exports.addNewMess = async(req,res)=>{
   let url = req.file.path;
   let filename = req.file.filename;
-  let {name,description,address} = req.body;
-  let newMess = new Mess ({ name : name, description : description, address:address});
+  let {name,description,address,category}  = req.body;
+  let newMess = new Mess ({ name : name, description : description, address:address, category : category});
   newMess.owner = req.user._id;
   let consumer = await Consumer.findById(req.user._id);
   consumer.mess.push(newMess._id);
@@ -36,7 +36,6 @@ module.exports.searchMess =  async (req, res) => {
     const messes = await Mess.find({
       name: { $regex: search, $options: "i" }
     });
-    console.log(messes)
 
     
     if (!messes) {

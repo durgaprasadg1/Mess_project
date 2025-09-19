@@ -20,7 +20,7 @@
               <div class="position-relative">
                 <img
                   src="<%= mess.image.url %>"
-                  class="card-img-top"
+                  class="card-img-top rounded-3"
                   alt="<%= mess.name %>"
                   style="object-fit: cover; height: 200px;"
                 />
@@ -29,12 +29,18 @@
                     <%= mess.name %>
                   </h5>
                 </div>
-              </div>
+              </div>  
+
+              
 
               <div class="card-body text-center">
                 <h6 class="fw-bold"><%= mess.name %></h6>
+                  <h6 class="card-title text-white bg-dark bg-opacity-50 px-2 py-1 rounded">
+                  <%= mess.category %>
+                </h6>
                 <p class="text-muted small mb-0">Click to view details</p>
               </div>
+              
             </div>
           </a>
         </div>

@@ -1,111 +1,7 @@
-<style>
-  .navbar {
-    background: #ffffff !important;
-    border-bottom: 1px solid #e9ecef;
-    padding: 0.9rem 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  }
-
-  .navbar-brand {
-    font-weight: 700;
-    font-size: 1.6rem;
-    color: #0d6efd !important;
-    display: flex;
-    align-items: center;
-    letter-spacing: 0.5px;
-    transition: color 0.2s ease-in-out;
-  }
-  .navbar-brand i {
-    margin-right: 10px;
-    color: #ffc107; /* golden accent */
-    font-size: 1.4rem;
-  }
-  .navbar-brand:hover {
-    color: #084298 !important;
-  }
-
-  .nav-link {
-    font-weight: 500;
-    margin: 0 8px;
-    color: #495057 !important;
-    transition: all 0.25s ease-in-out;
-    padding: 6px 14px;
-    border-radius: 20px;
-  }
-  .nav-link:hover {
-    background: #f1f5ff;
-    color: #0d6efd !important;
-  }
-
-  .search-box {
-    display: flex;
-    align-items: center;
-    background: #f8fafc;
-    border-radius: 30px;
-    padding: 4px 14px;
-    border: 1px solid #dee2e6;
-    transition: all 0.25s;
-  }
-  .search-box:focus-within {
-    border-color: #0d6efd;
-    box-shadow: 0 0 5px rgba(13, 110, 253, 0.25);
-  }
-  #search-input {
-    border: none;
-    background: transparent;
-    outline: none;
-    width: 200px;
-    padding: 6px;
-    font-size: 0.95rem;
-    color: #212529;
-  }
-  .btn-search {
-    border: none;
-    background: none;
-    color: #0d6efd;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-  .btn-search:hover {
-    color: #084298;
-    transform: scale(1.1);
-  }
-
-  .user-info {
-    display: flex;
-    align-items: center;
-    background: #f8f9fa;
-    padding: 6px 14px;
-    border-radius: 25px;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-  .user-info i {
-    margin-right: 8px;
-    color: #0d6efd;
-  }
-  .user-info h6 {
-    margin: 0;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #212529;
-  }
-
-  @media (max-width: 768px) {
-    #search-input {
-      width: 120px;
-    }
-    .user-info {
-      margin-top: 10px;
-    }
-  }
-</style>
-
-<nav class="navbar navbar-expand-md sticky-top">
+<nav class="navbar navbar-expand-md navbar-light bg-white sticky-top border-bottom shadow-sm py-2">
   <div class="container">
-    <!-- Logo / Brand -->
-    <a class="navbar-brand" href="/mess">
-      <i class="fa-solid fa-utensils"></i> MyMess
+    <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center me-auto text-decoration-none" href="/mess" style="letter-spacing: 0.5px;">
+      <i class="fa-solid fa-utensils me-2" style="color: #ffc107; font-size: 1.4rem;"></i> MyMess
     </a>
 
     <button
@@ -121,55 +17,47 @@
     </button>
 
     <div class="collapse navbar-collapse" id="messNavbar">
-      <!-- Left Menu -->
-      <ul class="navbar-nav me-auto">
+      <ul class="navbar-nav me-auto ms-md-4">
         <li class="nav-item">
-          <a class="nav-link" href="/mess">Home</a>
+          <a class="nav-link text-secondary fw-medium p-2 mx-1 rounded-pill" href="/mess">Home</a>
         </li>
         <% if(currentUser){ %>
         <li class="nav-item">
-          <a class="nav-link" href="/mess/new">Add Your Mess</a>
+          <a class="nav-link text-secondary fw-medium p-2 mx-1 rounded-pill" href="/mess/new">Add Your Mess</a>
         </li>
         <% if(currentUser && noOfMess > 0){ %>
         <li class="nav-item">
-          <a class="nav-link" href="/mess/<%= currentUser.mess[0] %>/orders"
-            >Orders</a
-          >
+          <a class="nav-link text-secondary fw-medium p-2 mx-1 rounded-pill" href="/mess/<%= currentUser.mess[0] %>/orders">Orders</a>
         </li>
         <% } %>
-        <a class="nav-link" href="/consumer/<%= currentUser._id %>/History"
-            >History</a
-          >
-        
+        <li class="nav-item">
+          <a class="nav-link text-secondary fw-medium p-2 mx-1 rounded-pill" href="/consumer/<%= currentUser._id %>/History">History</a>
+        </li>
         <% } %>
       </ul>
 
-      <form class="d-flex mx-3" method="get" action="/mess/search">
-        <div class="search-box">
-          <input type="search" name="search" placeholder="Search Mess..." id="search-input" />
-          <button class="btn-search" type="submit">
+      <form class="d-flex my-2 my-md-0 mx-3" method="get" action="/mess/search">
+        <div class="d-flex align-items-center bg-light rounded-pill border py-1 ps-3 shadow-sm">
+          <input type="search" name="search" placeholder="Search Mess..." id="search-input" class="form-control-plaintext p-0" style="width: 200px;" />
+          <button class="btn btn-link text-primary fs-5 p-0 me-2" type="submit">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
       </form>
 
-      <!-- Right Menu -->
       <ul class="navbar-nav">
         <% if(currentUser){ %>
-        <div class="user-info mx-2" id="profile" data-consumer-id="<%= currentUser._id %>">
-            <i class="fa-solid fa-user"></i>
-            <h6><%= currentUser.username %></h6>
+        <div class="d-flex align-items-center bg-light p-2 rounded-pill mx-2 my-2 my-md-0 shadow-sm" id="profile" data-consumer-id="<%= currentUser._id %>">
+            <i class="fa-solid fa-user me-2 text-primary"></i>
+            <h6 class="m-0 fs-6 fw-semibold text-dark"><%= currentUser.username %></h6>
           </div>
 
-          <!-- Profile Info Popup -->
           <div id="profile-info" 
-              style="display:none; position:absolute; background:#fff; border:1px solid #ddd; padding:15px; border-radius:10px; min-width:220px; z-index:1000; box-shadow:0px 4px 12px rgba(0,0,0,0.15);">
+            style="display:none; position:absolute; min-width:220px; z-index:1000;"
+            class="bg-white border p-3 rounded shadow-lg">
           </div>
 
-        
-
-
-        <li class="nav-item">
+        <li class="nav-item d-flex align-items-center">
           <a
             class="nav-link btn btn-outline-danger px-3 py-1 ms-2"
             href="/login/logout"
@@ -190,6 +78,7 @@
 </nav>
 
 <script>
+// The original JavaScript is kept as is. The hover logic for showing/hiding the profile info is retained.
 document.addEventListener("DOMContentLoaded", () => {
   const profile = document.getElementById("profile");
   const infoDiv = document.getElementById("profile-info");
@@ -215,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const rect = profile.getBoundingClientRect();
+      // Positioning is kept in JavaScript, relative to the profile element
       infoDiv.style.top = rect.bottom + 10 + "px";
       infoDiv.style.left = rect.left + "px";
       infoDiv.style.display = "block";

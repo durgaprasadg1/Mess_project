@@ -95,10 +95,8 @@ module.exports.showingOrders = async (req, res) => {
 };
 
 module.exports.gettingPayment = async (req, res) => {
-  // console.log(req.params);
   let { id } = req.params;
   let mess = await Mess.findById(id);
-  // console.log("this mess is to add " +  mess);
   if (!mess) {
     req.flash("error", "Mess not found");
     return res.redirect("/mess");
@@ -174,7 +172,6 @@ module.exports.verifyingPayment = async (req, res) => {
 module.exports.deleteOrdersOfThisMess = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
         const mess = await Mess.findById(id); 
         if (!mess) {
             req.flash("error", "Mess not found");
