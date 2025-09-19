@@ -156,10 +156,19 @@
       <!-- Right Menu -->
       <ul class="navbar-nav">
         <% if(currentUser){ %>
-        <div class="user-info mx-2">
-          <i class="fa-solid fa-user"></i>
-          <h6><%= currentUser.username %></h6>
-        </div>
+        <div class="user-info mx-2" id="profile" data-consumer-id="<%= currentUser._id %>">
+            <i class="fa-solid fa-user"></i>
+            <h6><%= currentUser.username %></h6>
+          </div>
+
+          <!-- Profile Info Popup -->
+          <div id="profile-info" 
+              style="display:none; position:absolute; background:#fff; border:1px solid #ddd; padding:15px; border-radius:10px; min-width:220px; z-index:1000; box-shadow:0px 4px 12px rgba(0,0,0,0.15);">
+          </div>
+
+        
+
+
         <li class="nav-item">
           <a
             class="nav-link btn btn-outline-danger px-3 py-1 ms-2"
@@ -179,3 +188,44 @@
     </div>
   </div>
 </nav>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const profile = document.getElementById("profile");
+  const infoDiv = document.getElementById("profile-info");
+
+  profile.addEventListener("mouseenter", async (e) => {
+    const consumerId = profile.getAttribute("data-consumer-id");
+    console.log(consumerId);
+    try {
+      const res = await fetch(`/consumer/${consumerId}/info`);
+      const data = await res.json();
+
+      if (data.error) {
+        infoDiv.innerHTML = `<p class="text-danger">${data.error}</p>`;
+      } else {
+        infoDiv.innerHTML = `
+          <h5 class="fw-bold mb-2">${data.username}</h5>
+          <p class="mb-1"><b>Email:</b> ${data.email}</p>
+          <p class="mb-1"><b>Phone:</b> ${data.phone}</p>
+          <p class="mb-1"><b>Messes:</b> ${data.mess?.length || 0}</p>
+          <p class="mb-1"><b>Orders:</b> ${data.orders?.length || 0}</p>
+          <p class="mb-1"><b>Reviews:</b> ${data.reviews?.length || 0}</p>
+        `;
+      }
+
+      const rect = profile.getBoundingClientRect();
+      infoDiv.style.top = rect.bottom + 10 + "px";
+      infoDiv.style.left = rect.left + "px";
+      infoDiv.style.display = "block";
+    } catch (err) {
+      infoDiv.innerHTML = "<p class='text-danger'>Error fetching consumer info</p>";
+      infoDiv.style.display = "block";
+    }
+  });
+
+  profile.addEventListener("mouseleave", () => {
+    infoDiv.style.display = "none";
+  });
+});
+</script>

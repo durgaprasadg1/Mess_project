@@ -36,9 +36,6 @@ module.exports.deleteHistory = async (req, res) => {
       return res.redirect("/");
     }
 
-    // Delete all orders belonging to this consumer
-    // await Order.deleteMany({ _id: { $in: consumer.orders } });
-    // Clear orders array in consumer
     consumer.orders = [];
     await consumer.save();
 
@@ -48,6 +45,23 @@ module.exports.deleteHistory = async (req, res) => {
     console.error(err);
     req.flash("error", "Something went wrong");
     res.redirect("/");
+  }
+}
+
+module.exports.consumerInfo =  async (req, res) => {
+  try {
+    let consumer = await Consumer.findById(req.params.id)
+      .populate("mess")
+      .populate("reviews")
+      .populate("orders");
+
+    if (!consumer) {
+      return res.status(404).json({ error: "Consumer not found" });
+    }
+
+    res.json(consumer);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
   }
 }
 

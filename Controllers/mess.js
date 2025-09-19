@@ -23,3 +23,36 @@ module.exports.addNewMess = async(req,res)=>{
   req.flash("success","New Mess Added !")
   res.redirect("/");
 }
+
+module.exports.searchMess =  async (req, res) => {
+  try {
+    const { search } = req.query;
+
+    if (!search) {
+      req.flash("error", "Please enter something to search");
+      return res.redirect("/mess");
+    }
+
+    const messes = await Mess.find({
+      name: { $regex: search, $options: "i" }
+    });
+    console.log(messes)
+
+    
+    if (!messes) {
+    req.flash("error", "Mess not found");
+    return res.redirect("/mess");
+    }
+
+    if (messes.length === 0) {
+      req.flash("error", "Mess not found");
+      return res.redirect("/mess");
+    }
+
+    res.render("Mess/singlemess", { messes });
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong");
+    res.redirect("/mess");
+  }
+}
