@@ -1,0 +1,53 @@
+<%- layout("/layouts/boilerplate") %>
+<style>
+  .hover-shadow {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .hover-shadow:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  }
+</style>
+
+<div class="container my-5">
+  <div class="row g-4">
+    <% if (messes && messes.length > 0) { %>
+       <h2 class="text-center fw-bold mb-5 text-primary">Mess Near You</h2>
+      <% messes.forEach(mess => { %>
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="/mess/<%= mess.id %>" class="text-decoration-none text-dark">
+            <div class="card shadow-sm border-0  h-100 overflow-hidden hover-shadow transition">
+              <!-- Image -->
+              <div class="position-relative">
+                <img
+                  src="<%= mess.image.url %>"
+                  class="card-img-top"
+                  alt="<%= mess.name %>"
+                  style="object-fit: cover; height: 200px;"
+                />
+                <div class="card-img-overlay d-flex align-items-end p-2">
+                  <h5 class="card-title text-white bg-dark bg-opacity-50 px-2 py-1 rounded">
+                    <%= mess.name %>
+                  </h5>
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="card-body text-center">
+                <h6 class="fw-bold"><%= mess.name %></h6>
+                <p class="text-muted small mb-0">Click to view details</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="col-12">
+        <div class="alert alert-info text-center shadow-sm">
+          No messes available near you right now.
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>
+

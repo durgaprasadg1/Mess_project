@@ -1,0 +1,67 @@
+<style>
+    body {
+        background-color: #f8f9fa; /* Light grayish background */
+        color: #495057;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+    }
+    .error-container {
+        max-width: 600px;
+        padding: 40px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    }
+    .error-code {
+        font-size: 8rem;
+        font-weight: bold;
+        color: #adb5bd; /* Calm gray */
+        margin-bottom: 0;
+        line-height: 1;
+    }
+    .error-text {
+        font-size: 2rem;
+        color: #6c757d; /* Subtle gray */
+        margin-top: 0;
+        font-weight: 500;
+    }
+    .lead {
+        font-size: 1.1rem;
+        color: #868e96;
+    }
+    .btn-home {
+        background-color: #dee2e6; /* Light gray button */
+        border: none;
+        color: #495057;
+        font-weight: 600;
+        padding: 10px 30px;
+        text-transform: uppercase;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+    .btn-home:hover {
+        background-color: #ced4da;
+        color: #212529;
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="error-container">
+                <h1 class="error-code">404</h1>
+                <h2 class="error-text">Page Not Found</h2>
+                <p class="lead mt-4">
+                    We couldn't find the page you were looking for.<br>
+                    It might have been moved or deleted.
+                </p>
+                <a href="/" class="btn btn-home mt-3">Go to Homepage</a>
+            </div>
+        </div>
+    </div>
+</div>

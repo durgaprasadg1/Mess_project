@@ -1,0 +1,89 @@
+<%- layout("/layouts/boilerplate") %>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-body p-4">
+          <h3 class="text-center mb-4">Add New Mess</h3>
+
+          <form
+            method="post"
+            action="/mess/new"
+            enctype="multipart/form-data"
+            novalidate
+            class="needs-validation"
+          >
+            <!-- Mess Name -->
+            <div class="mb-3">
+              <label for="name" class="form-label fw-semibold">Mess Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-control"
+                placeholder="Kakunchi Mess"
+                required
+              />
+              <div class="invalid-feedback">Give a sophisticated name</div>
+            </div>
+
+            <!-- Tagline -->
+            <div class="mb-3">
+              <label for="tagline" class="form-label fw-semibold"
+                >Tag Line</label
+              >
+              <input
+                type="text"
+                id="tagline"
+                name="description"
+                class="form-control"
+                placeholder="Bin Khaye Raha Naa Jaaye"
+              />
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+              <label for="address" class="form-label fw-semibold"
+                >Address</label
+              >
+              <input
+                type="text"
+                id="address"
+                name="address"
+                class="form-control"
+                placeholder="Give Full Address"
+                required
+              />
+              <div class="invalid-feedback">Add Address</div>
+            </div>
+
+            <!-- Banner Image -->
+            <div class="mb-3">
+              <label for="image" class="form-label fw-semibold"
+                >Mess Banner</label
+              >
+              <input
+                type="file"
+                id="image"
+                name="image"
+                class="form-control"
+                required
+              />
+              <div class="invalid-feedback">
+                Only .jpg, .jpeg, .png formats are allowed
+              </div>
+            </div>
+
+            <!-- Button -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Add Mess
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

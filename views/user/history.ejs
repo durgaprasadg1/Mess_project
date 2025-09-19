@@ -1,0 +1,64 @@
+<%- layout("/layouts/boilerplate") %>
+
+<div class="container my-5">
+  <h2 class="mb-4 text-center fw-bold text-primary">Order History</h2>
+  
+    <div class="container my-5">
+
+
+        <% if (currentUser.orders && currentUser.orders.length > 0) { %>
+        <form method="post" action="/consumer/<%= currentUser._id %>/history?_method=DELETE" onsubmit="return confirm('Are you sure you want to delete your order history?')">
+            <button type="submit" 
+            class="btn btn-danger btn-sm fw-semibold shadow-sm px-3 py-2"
+            style="border-radius: 25px; transition: all 0.3s;">
+            <i class="fa-solid fa-trash me-2"></i> Delete History
+            </button>
+        </form>
+        <% } %>
+    </div>
+  <% if (orders && orders.length > 0) { %>
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-striped align-middle text-center">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Sr. No</th>
+          <th scope="col">Mess</th>
+          <th scope="col">Total Price</th>
+          <th scope="col">Placed On</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach((order, index) => { %>
+        <tr>
+          <th scope="row"><%= index + 1 %></th>
+          <td><%= order.mess ? order.mess.name : "N/A" %></td>
+          <td>₹<%= order.totalPrice %></td>
+          <td>
+            <%= order.createdAt.toLocaleString("en-IN", {
+              weekday: "short",
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              hour12: true
+            }) %>
+          </td>
+          <td>
+            <% if (order.done) { %>
+              <span class="badge bg-success">Completed</span>
+            <% } else { %>
+              <span class="badge bg-warning text-dark">Pending</span>
+            <% } %>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } else { %>
+  <div class="alert alert-info text-center">No orders found.</div>
+  <% } %>
+</div>

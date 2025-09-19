@@ -1,0 +1,56 @@
+<%- layout("/layouts/boilerplate") %>
+
+<div class="container my-5 text-center">
+    <h2>Booking: <%= mess.name %></h2>
+    <p>Amount to Pay: ₹<%= mess.price %></p>
+
+    <button id="rzp-button" class="btn btn-success">Pay Now</button>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        document.getElementById("rzp-button").onclick = function (e) {
+            let options = {
+                key: "<%= key %>",
+                amount: "<%= order.amount %>",
+                currency: "INR",
+                name: "Mess Booking",
+                description: "Plate Booking for XYZ",
+                order_id: "<%= order.id %>",
+                
+                handler: function (response) {
+                        fetch(`/mess/<%=mess._id %>/verify-payment`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(response),
+                        })
+                        .then( res =>{
+                        // console.log(res);
+
+                        if (res.ok) {
+                          alert("Payment Done !");
+                            window.location.href = res.url;
+                        } else {
+                            // Verification failed (e.g., signature mismatch)
+                            alert(data.message || "Payment verification failed!");
+                            window.location.href = '/mess'; // Redirect to home or mess list on failure
+                        }
+                        })
+                        .catch((res)=>{
+                        alert("An unexpected error occurred. Please check the console.");
+                        window.location.href = '/mess'; // Fallback redirect
+                        });
+                },
+              
+                prefill: {
+                    name: "<%= currentUser.username %>",
+                    email: "<%= currentUser.email || 'test@example.com' %>",
+                    contact: "<%= currentUser.phone %>",
+                },
+                theme: { color: "#0d6efd" },
+            };
+            let rzp1 = new Razorpay(options);
+            rzp1.open();
+            e.preventDefault();
+        };
+    </script>
+</div>
