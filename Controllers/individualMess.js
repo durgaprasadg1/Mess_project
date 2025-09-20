@@ -44,7 +44,8 @@ module.exports.addedMenu = async (req, res) => {
 };
 
 module.exports.addReview = async (req, res) => {
-  let { id } = req.params;
+  try{
+    let { id } = req.params;
   let mess = await Mess.findById(id);
   let newReview = new Review(req.body.reviews);
   newReview.author = req.user._id;
@@ -55,7 +56,12 @@ module.exports.addReview = async (req, res) => {
     $push: { reviews: newReview._id },
   });
   req.flash("success", "New Review Saved");
-  res.redirect(`/mess/${mess._id}`);
+  res.redirect(`/mess/${mess._id}`)
+  }
+  catch{
+    req.flash("error","Rating Star is required.")
+    res.redirect(`/mess/${id}`)
+  }
 };
 
 module.exports.deleteReview = async (req, res) => {

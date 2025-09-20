@@ -13,10 +13,10 @@ const messSchema = Joi.object({ // ye ek object hai jo actual scehema ke field k
         description:Joi.string().required(),
         address:Joi.string().required(),
         menu : Joi.string().allow("",null),
-        image: Joi.string().allow("",null),
+        image: Joi.string().required(),
         price:Joi.number().required().min(0),
         owner : Joi.string().required(),
-        category: Joi.string().required(),
+        category: Joi.string().required(),  
     }).required()
 });
 
