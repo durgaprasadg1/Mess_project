@@ -30,14 +30,17 @@ module.exports.renderMenu = async (req, res) => {
 };
 
 module.exports.addedMenu = async (req, res) => {
-  let { id } = req.params;
-  let { dish1, dish2, dish3, dish4, dish5, price } = req.body;
-  let dishes = [dish1, dish2, dish3, dish4, dish5];
-  let mess = await Mess.findByIdAndUpdate(id, { menu: dishes });
-  mess.price = price;
-  await mess.save();
-  req.flash("success", "Menu Updated Successfully");
-  res.redirect(`/mess/${id}`);
+  try {
+    const { id } = req.params;
+    const { menu, price } = req.body; 
+    let mess = await Mess.findByIdAndUpdate(id, { menu: menu, price: price }, { new: true });
+    req.flash("success", "Menu Updated Successfully");
+    res.redirect(`/mess/${id}`);
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong while updating the menu");
+    res.redirect(`/mess/${id}`);
+  }
 };
 
 module.exports.addReview = async (req, res) => {
