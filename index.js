@@ -20,6 +20,7 @@ const loginRouter = require("./router/login");
 const orderRouter = require("./router/orders");
 const consumerRouter = require("./router/consumer");
 
+
 const app = express();
 const port = 8080;
 
@@ -33,15 +34,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(methodOverride("_method"));
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/MessManagement";
-
+// const MONGO_URL = "mongodb://127.0.0.1:27017/MessManagement";
+const dbUrl = process.env.ATLASDB_URL;
 mongoose
-  .connect(MONGO_URL)
+  .connect(dbUrl)
   .then(() => console.log(" MongoDB Connected"))
   .catch((err) => console.log(" MongoDB Connection Failed", err));
 
 const store = MongoStore.create({
-  mongoUrl: MONGO_URL,
+  mongoUrl: dbUrl,
   crypto: { secret: process.env.SECRET || "fallbacksecret" },
   touchAfter: 24 * 3600,
 });
@@ -50,7 +51,7 @@ store.on("error", () => {
 });
 
 const sessionOption = {
-  store,
+  // store,
   secret: process.env.SECRET || "fallbacksecret",
   resave: false,
   saveUninitialized: true,
