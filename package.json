@@ -1,6 +1,6 @@
 {
   "engines": {
-    "node":"22.14.0"
+    "node": "22.14.0"
   },
   "name": "mess",
   "version": "1.0.0",
@@ -19,6 +19,7 @@
     "dotenv": "^17.2.2",
     "ejs": "^3.1.10",
     "ejs-mate": "^4.0.0",
+    "express": "^4.21.2",
     "express-session": "^1.18.2",
     "joe": "^2.0.2",
     "joi": "^18.0.1",
