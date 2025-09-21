@@ -31,7 +31,7 @@ Vanilla JS for interactivity
 
 # Backend
 
-Node.js
+![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js) 
 
 Express.js
 
