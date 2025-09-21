@@ -19,15 +19,13 @@ Responsive UI: Mobile-first design using Tailwind CSS.
 
 Admin Features (if enabled): Mess owners can manage listings and update orders.
 
-# 🛠️ Tech Stack 
+## 🛠️ Tech Stack 
 
 # Frontend
 
-EJS (templating engine)
-
-BootStrap for styling
-
-Vanilla JS for interactivity
+![EJS](https://img.shields.io/badge/EJS-3.x-blue?logo=ejs)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.x-purple?logo=bootstrap)
+![Vanilla JS](https://img.shields.io/badge/Vanilla%20JS-ES6-yellow?logo=javascript)
 
 # Backend
 
