@@ -5,35 +5,38 @@ Users can browse messes, place orders, track order status, and manage their prof
 
 # 🚀 Features 
 
-Mess Listing & Details: Browse multiple messes, view menus and prices.
+- Mess Listing & Details: Browse multiple messes, view menus and prices.
 
-User Authentication: Secure login & registration.
+- User Authentication: Secure login & registration.
 
-Place Orders: Select mess, submit order, and track placed time (formatted in IST).
+- Place Orders: Select mess, submit order, and track placed time (formatted in IST).
 
-Order History & Tracking: View all previous orders with status (Pending / Confirmed / Delivered).
+- Order History & Tracking: View all previous orders with status (Pending / Confirmed / Delivered).
 
-Profile Dashboard: Manage account, see past orders.
+- Profile Dashboard: Manage account, see past orders.
 
-Responsive UI: Mobile-first design using Tailwind CSS.
+- Responsive UI: Mobile-first design using Tailwind CSS.
 
-Admin Features (if enabled): Mess owners can manage listings and update orders.
+- Admin Features (if enabled): Mess owners can manage listings and update orders.
 
 ## 🛠️ Tech Stack 
 
 # Frontend
 
-![EJS](https://img.shields.io/badge/EJS-3.x-blue?logo=ejs)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.x-purple?logo=bootstrap)
-![Vanilla JS](https://img.shields.io/badge/Vanilla%20JS-ES6-yellow?logo=javascript)
+- ![EJS](https://img.shields.io/badge/EJS-3.x-blue?logo=ejs)
+- 
+- ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.x-purple?logo=bootstrap)
+- 
+- ![Vanilla JS](https://img.shields.io/badge/Vanilla%20JS-ES6-yellow?logo=javascript)
+
 
 # Backend
 
-![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js) 
+- ![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js) 
 
-![Express](https://img.shields.io/badge/Express.js-backend-lightgrey?logo=express)
-
-![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-blue?logo=mongodb)
+- ![Express](https://img.shields.io/badge/Express.js-backend-lightgrey?logo=express)
+- 
+- ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-blue?logo=mongodb)
 
 # Deployment
 
@@ -43,57 +46,53 @@ Hosted on ![Render](https://img.shields.io/badge/Render-Active-brightgreen?logo=
 Environment variables for MongoDB URI and session secrets
 
 # 📦 Installation
- Clone the repo
-git clone https://github.com/durgaprasadg1/Mess_project.git
+- Clone the repo
+  - git clone https://github.com/durgaprasadg1/Mess_project.git
+  - cd mess-project
 
-cd mess-project
+- Install dependencies
+ - npm install
 
-# Install dependencies
-npm install
+- Setup environment variables
+  - cp .env.example .env
+  - Fill in your MongoDB URI and session secret
 
-# Setup environment variables
-cp .env.example .env
-Fill in your MongoDB URI and session secret
-
-# Run development server
-node index.js
-
-
-Visit: http://localhost:3000
+- Run development server
+ - node index.js
+ - Visit: http://localhost:3000
 
  # ✨ Usage 
- 
 
-Register or log in to your account.
+- Register or log in to your account.
 
-Browse available messes.
+- Browse available messes.
 
-Place orders and see status in Placed On column.
+- Place orders and see status in Placed On column.
 
-View past orders in profile.
+- View past orders in profile.
 
-Admin (if enabled) can update status of pending orders.
+- Admin (if enabled) can update status of pending orders.
 
 # 🎯 Future Enhancements 
-Feature	Status
-Admin dashboard	Planned
-Real-time notifications	Upcoming
-Export order history	Roadmap
-Email / SMS alerts	Idea stage
+- Feature	Status
+- Admin dashboard	Planned
+- Real-time notifications	Upcoming
+- Export order history	Roadmap
+- Email / SMS alerts	Idea stage
 
 # 📄 License
 
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+- ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 # 💡 Credits
 
-Node.js & Express
+- Node.js & Express
 
-MongoDB & Mongoose
+- MongoDB & Mongoose
 
-BootStrap 
+- BootStrap 
 
-EJS
+- EJS
 # 🤝 Contributing
 
-Contributions, feedback, or improvements (especially UI or feature suggestions) are welcome! Please open an issue or fork the project and submit a pull request.
+- Contributions, feedback, or improvements (especially UI or feature suggestions) are welcome! Please open an issue or fork the project and submit a pull request.
