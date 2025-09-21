@@ -24,9 +24,9 @@ Users can browse messes, place orders, track order status, and manage their prof
 # Frontend
 
 - ![EJS](https://img.shields.io/badge/EJS-3.x-blue?logo=ejs)
-- 
+  
 - ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.x-purple?logo=bootstrap)
-- 
+  
 - ![Vanilla JS](https://img.shields.io/badge/Vanilla%20JS-ES6-yellow?logo=javascript)
 
 
@@ -35,7 +35,7 @@ Users can browse messes, place orders, track order status, and manage their prof
 - ![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js) 
 
 - ![Express](https://img.shields.io/badge/Express.js-backend-lightgrey?logo=express)
-- 
+  
 - ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-blue?logo=mongodb)
 
 # Deployment
