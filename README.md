@@ -54,7 +54,7 @@ npm install
 
 # Setup environment variables
 cp .env.example .env
-# Fill in your MongoDB URI and session secret
+Fill in your MongoDB URI and session secret
 
 # Run development server
 node index.js
@@ -62,7 +62,7 @@ node index.js
 
 Visit: http://localhost:3000
 
- # ** ✨ Usage **
+ # ✨ Usage 
  
 
 Register or log in to your account.
