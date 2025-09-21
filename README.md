@@ -19,7 +19,7 @@ Users can browse messes, place orders, track order status, and manage their prof
 
 - Admin Features (if enabled): Mess owners can manage listings and update orders.
 
-## 🛠️ Tech Stack 
+# 🛠️ Tech Stack 
 
 # Frontend
 
@@ -58,8 +58,8 @@ Environment variables for MongoDB URI and session secrets
   - Fill in your MongoDB URI and session secret
 
 - Run development server
- - node index.js
- - Visit: http://localhost:3000
+  - node index.js
+  - Visit: http://localhost:3000
 
  # ✨ Usage 
 
