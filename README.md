@@ -1,4 +1,4 @@
-#🥘 MessMate 
+# 🥘 MessMate 
 
 A modern, full-stack mess ordering app built with Node.js, Express, MongoDB, and EJS.
 Users can browse messes, place orders, track order status, and manage their profile—all in one simple, responsive interface.
