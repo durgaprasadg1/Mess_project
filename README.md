@@ -33,9 +33,9 @@ Vanilla JS for interactivity
 
 ![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js) 
 
-Express.js
+![Express](https://img.shields.io/badge/Express.js-backend-lightgrey?logo=express)
 
-MongoDB with Mongoose
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-blue?logo=mongodb)
 
 # Deployment
 
@@ -81,9 +81,10 @@ Admin dashboard	Planned
 Real-time notifications	Upcoming
 Export order history	Roadmap
 Email / SMS alerts	Idea stage
+
 # 📄 License
 
-MIT License – free to use, modify, and distribute.
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 # 💡 Credits
 
