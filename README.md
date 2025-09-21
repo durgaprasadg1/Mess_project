@@ -46,6 +46,7 @@ Environment variables for MongoDB URI and session secrets
 📦 Installation
 # Clone the repo
 git clone https://github.com/durgaprasadg1/Mess_project.git
+
 cd mess-project
 
 # Install dependencies
@@ -93,3 +94,6 @@ MongoDB & Mongoose
 BootStrap 
 
 EJS
+# 🤝 Contributing
+
+Contributions, feedback, or improvements (especially UI or feature suggestions) are welcome! Please open an issue or fork the project and submit a pull request.
