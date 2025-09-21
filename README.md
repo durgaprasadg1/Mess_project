@@ -1,9 +1,9 @@
-# **🥘 MessMate **
+#🥘 MessMate 
 
 A modern, full-stack mess ordering app built with Node.js, Express, MongoDB, and EJS.
 Users can browse messes, place orders, track order status, and manage their profile—all in one simple, responsive interface.
 
-# ** 🚀 Features **
+# 🚀 Features 
 
 Mess Listing & Details: Browse multiple messes, view menus and prices.
 
@@ -19,7 +19,7 @@ Responsive UI: Mobile-first design using Tailwind CSS.
 
 Admin Features (if enabled): Mess owners can manage listings and update orders.
 
-# **🛠️ Tech Stack **
+# 🛠️ Tech Stack 
 
 # Frontend
 
@@ -74,22 +74,22 @@ View past orders in profile.
 
 Admin (if enabled) can update status of pending orders.
 
-# ** 🎯 Future Enhancements **
+# 🎯 Future Enhancements 
 Feature	Status
 Admin dashboard	Planned
 Real-time notifications	Upcoming
 Export order history	Roadmap
 Email / SMS alerts	Idea stage
-📄 License
+# 📄 License
 
 MIT License – free to use, modify, and distribute.
 
-# **💡 Credits**
+# 💡 Credits
 
 Node.js & Express
 
 MongoDB & Mongoose
 
-BootStrap CSS Classes
+BootStrap 
 
 EJS
