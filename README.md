@@ -37,12 +37,13 @@ Admin Features (if enabled): Mess owners can manage listings and update orders.
 
 # Deployment
 
-Hosted on [Render.com]
+Hosted on ![Render](https://img.shields.io/badge/Render-Active-brightgreen?logo=render)
+
 
 Environment variables for MongoDB URI and session secrets
 
-📦 Installation
-# Clone the repo
+# 📦 Installation
+ Clone the repo
 git clone https://github.com/durgaprasadg1/Mess_project.git
 
 cd mess-project
