@@ -25,7 +25,7 @@ Admin Features (if enabled): Mess owners can manage listings and update orders.
 
 EJS (templating engine)
 
-Tailwind CSS for styling
+BootStrap for styling
 
 Vanilla JS for interactivity
 
