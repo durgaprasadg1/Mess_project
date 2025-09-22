@@ -35,7 +35,7 @@
           <td><%= order.mess ? order.mess.name : "N/A" %></td>
           <td>₹<%= order.totalPrice %></td>
           <td>
-            <%= order.createdAt.toLocaleString("en-IN", {
+            <%= new Date(order.createdAt).toLocaleString("en-IN", {
               weekday: "short",
               day: "2-digit",
               month: "short",
@@ -43,7 +43,8 @@
               hour: "2-digit",
               minute: "2-digit",
               second: "2-digit",
-              hour12: true
+              hour12: true,
+              timeZone: "Asia/Kolkata"
             }) %>
           </td>
           <td>
