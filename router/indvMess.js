@@ -25,8 +25,13 @@ const {
   showingOrders,
   gettingPayment,
   verifyingPayment,
-  closeOpen
+  closeOpen,
+  editMessForm,
+  editTheMess
 } = require("../Controllers/individualMess.js");
+const multer = require('multer');
+const { storage } = require('../cloudConfig.js')
+const uploads = multer({ storage});
 
 
 router.get("/", wrapAsync(thatMess));
@@ -49,5 +54,9 @@ router.post( "/booking", isLoggedIn, validateOrder, wrapAsync(gettingPayment));
 router.post( "/verify-payment" , wrapAsync(verifyingPayment));
 router.delete( '/orders/delete' , wrapAsync(deleteOrdersOfThisMess))
 router.get('/closeOpen', isLoggedIn,isOwner , wrapAsync(closeOpen))
+
+router.get('/edit', isLoggedIn, isOwner, wrapAsync(editMessForm) );
+
+router.put('/edit' , isLoggedIn , isOwner , uploads.single('image'),wrapAsync(editTheMess));
 
 module.exports = router;

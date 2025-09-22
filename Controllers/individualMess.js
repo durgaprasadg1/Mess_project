@@ -4,7 +4,7 @@ const Mess = require("../Models/mess");
 const Review = require("../Models/reviews");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
-let paymentDone = true;
+// let paymentDone = true;
 
 module.exports.thatMess = async (req, res) => {
   let { id } = req.params;
@@ -225,3 +225,50 @@ module.exports.closeOpen = async (req, res) => {
     res.redirect(`/mess/${id}`);
   }
 };
+
+module.exports.editMessForm = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let mess = await Mess.findById(id);
+
+    if (!mess) {
+      req.flash("error", "Mess not found, cannot edit");
+      return res.redirect("/mess"); 
+    }
+
+    res.render("Mess/editMessForm.ejs", { mess });
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong");
+    res.redirect("/mess"); 
+  }
+};
+
+
+module.exports.editTheMess = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let { name, description, address, category } = req.body;
+    let mess = await Mess.findByIdAndUpdate(
+      id,{ name, description, address, category },
+      { new: true, runValidators: true }
+    );
+    if (!mess) {
+      req.flash("error", "Mess not found");
+      return res.redirect("/mess");
+    }
+    if (req.file) {
+      let url = req.file.path;
+      let filename = req.file.filename;
+      mess.image = { url, filename };
+      await mess.save(); 
+    }
+    req.flash("success", "Updates Saved");
+    res.redirect(`/mess/${id}`);
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong");
+    res.redirect(`/mess/${req.params.id}`);
+  }
+};
+
