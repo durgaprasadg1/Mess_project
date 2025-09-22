@@ -49,10 +49,10 @@
                 id="address"
                 name="address"
                 class="form-control"
-                placeholder="Give Full Address"
+                placeholder="Give Proper Address"
                 required
               />
-              <div class="invalid-feedback">Add Address</div>
+              <div class="invalid-feedback">Add Proper Address</div>
             </div>
 
             <div class="mb-3">
@@ -67,8 +67,88 @@
                 placeholder="Veg / Non-Veg / Both"
                 required
               />
-              <div class="invalid-feedback">Give a sophisticated name</div>
             </div>
+            <div class="mb-3">
+              <label for="ownerName" class="form-label fw-semibold"></label>
+                Owner Name :</label
+              >
+              <input
+                type="text"
+                id="ownerName"
+                name="ownerName"
+                class="form-control"
+                placeholder="RajPal Yadav"
+                minlength="3"
+                required
+              />
+            </div>
+             <div class="invalid-feedback">Invalid Name</div>
+
+            <div class="mb-3">
+              <label for="adharNumber" class="form-label fw-semibold"
+                >Aadhaar Number :</label
+              >
+              <input
+                type="text"
+                id="adharNumber"
+                name="adharNumber"
+                class="form-control"
+                placeholder="0000 0000 0000"
+                pattern="\d{12}"
+              required />
+            </div>
+            <div class="invalid-feedback">Invalid Adhar Number</div>
+
+
+            <div class="mb-3">
+              <label for="phoneNumber" class="form-label fw-semibold"
+                >Phone Number :</label
+              >
+              <input
+                type="tel"
+                id="phoneNumber"
+                name="phoneNumber"
+                class="form-control"
+                placeholder="9999999999"
+                pattern="\d{10}"
+              required />
+            </div>
+            <div class="invalid-feedback">Invalid Phone Number</div>
+
+
+            <div class="mb-3">
+                <label for="lat" class="form-label fw-semibold">Latitude :</label>
+                <input
+                  type="number"
+                  id="lat"
+                  name="lat"
+                  class="form-control"
+                  step="any"
+                  min="-90"
+                  max="90"
+                  placeholder="Location Latitude"
+                  required
+                />
+              </div>
+              <div class="invalid-feedback">Given Invalid Latitude </div>
+
+
+              <div class="mb-3">
+                <label for="lon" class="form-label fw-semibold">Longitude :</label>
+                <input
+                  type="number"
+                  id="lon"
+                  name="lon"
+                  class="form-control"
+                  step="any"
+                  min="-180"
+                  max="180"
+                  placeholder="Location Longitude"
+                  required
+                />
+              </div>
+              <div class="invalid-feedback">Given Invalid Longitude </div>
+
 
             <div class="mb-3">
               <label for="image" class="form-label fw-semibold"
@@ -78,6 +158,8 @@
                 type="file"
                 id="image"
                 name="image"
+                accept=".jpg,.jpeg,.png"
+
                 class="form-control"
                 required
               />

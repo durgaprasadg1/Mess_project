@@ -18,8 +18,10 @@ module.exports.addNewMess = async(req,res)=>{
   try{
     let url = req.file.path;
     let filename = req.file.filename;
-    let {name,description,address,category} = req.body;
-    let newMess = new Mess ({ name : name, description : description, address:address, category : category});
+    let {name,description,address,category, ownerName, adharNumber , phoneNumber, lat, lon} = req.body;
+    let newMess = new Mess ({ name : name, description : description, address:address, category : category, 
+      ownerName : ownerName, adharNumber : adharNumber , phoneNumber : phoneNumber, lat : lat, lon : lon
+    });
     if(!newMess){
       req.flash("error","No mess Added!");
       res.redirect("/"); 

@@ -2,12 +2,14 @@
 
 <div class="container my-5">
   <div class="row justify-content-center">
-    <div class="col-12 col-md-8 col-lg-6">
+    <div class="col-12 col-md-10 col-lg-9">
+
       <div class="card shadow-lg border-0 rounded-3 mb-4">
-        <div class="card-body p-4 text-center">
+        <div class="card-body text-center p-4">
           <h2 class="fw-bold text-primary mb-2"><%= mess.name %></h2>
-          <h6 class="card-title text-secondary bg-light px-3 py-1 rounded d-inline-block mb-3">
-            ( <%= mess.category %> )
+
+          <h6 class="card-subtitle text-secondary bg-light px-3 py-1 rounded d-inline-block mb-3">
+            (<%= mess.category %>)
           </h6>
 
           <p class="text-muted mb-3"><%= mess.description %></p>
@@ -17,9 +19,14 @@
             Owned by: <strong>@<%= mess.owner.username %></strong>
           </p>
 
-          <p class="mb-3">
-            <i class="bi bi-geo-alt-fill me-1 text-danger"></i>
+          <p class="mb-3 fw-semibold">
+            <i class="fa-solid fa-location-dot me-1"></i>
             <%= mess.address %>
+          </p>
+
+          <p class="mb-3 text-muted">
+            <strong>Latitude:</strong> <%= mess.lat %> <br>
+            <strong>Longitude:</strong> <%= mess.lon %>
           </p>
 
           <% if (mess.isOpen) { %>
@@ -28,29 +35,31 @@
             <span class="badge bg-danger fs-6 px-3 py-2">Closed</span>
           <% } %>
 
-          <!-- Menu -->
-          <h5 class="fw-semibold mt-4 text-primary">Menu</h5>
-          <div class="row g-3 mt-2">
-            <% mess.menu.forEach(item => { %>
-              <% if (item !== "") { %>
-                <div class="col-12 col-md-6">
-                  <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body d-flex align-items-center justify-content-center">
-                      <h6 class="mb-0 fw-semibold text-dark"><%= item %></h6>
+          <% if (mess.price) { %>
+            <p class="fw-bold fs-5 text-success mt-3">Price: ₹ <%= mess.price %></p>
+          <% } %>
+
+          <% if (mess.menu && mess.menu.length > 0) { %>
+            <h5 class="fw-semibold mt-4 text-primary">Menu</h5>
+            <div class="row g-3 mt-2">
+              <% mess.menu.forEach(item => { %>
+                <% if (item !== "") { %>
+                  <div class="col-12 col-md-6">
+                    <div class="card shadow-sm border-0 h-100">
+                      <div class="card-body d-flex align-items-center justify-content-center">
+                        <h6 class="mb-0 fw-semibold text-dark"><%= item %></h6>
+                      </div>
                     </div>
                   </div>
-                </div>
-              <% } %>
-            <% }) %>
-          </div>
-
-          <p class="fw-bold fs-5 text-success mt-3">Price: ₹ <%= mess.price %></p>
+                <% } %>
+              <% }) %>
+            </div>
+          <% } %>
         </div>
       </div>
 
       <% if (currentUser) { %>
-        <div class="d-flex flex-column flex-sm-row gap-3 mb-4">        
-
+        <div class="d-flex flex-column flex-md-row gap-3 mb-4">
           <% if (isOwner && currentUser.mess.length > 0) { %>
             <a href="/mess/<%= currentUser.mess[0]._id %>/closeOpen" 
                class="btn <%= mess.isOpen ? 'btn-danger' : 'btn-success' %> flex-fill">
@@ -75,14 +84,13 @@
             </a>
           <% } %>
 
-          <% if (mess.isOpen) { %>
+          <% if (mess.isOpen && mess.menu.length > 0) { %>
             <form method="post" action="/mess/<%= mess._id %>/booking" class="flex-fill">
               <button type="submit" class="btn btn-success w-100">
                 <i class="bi bi-calendar-check me-2"></i> Book Your Plate
               </button>
             </form>
           <% } %>
-
         </div>
       <% } %>
 
@@ -91,7 +99,6 @@
           <div class="card-body p-4">
             <h4 class="fw-bold mb-3">Leave a Review</h4>
             <form method="POST" action="/mess/<%= mess._id %>/review" novalidate class="needs-validation">
-              
               <div class="mb-3">
                 <label class="form-label fw-semibold">Rating</label>
                 <fieldset class="starability-slot">
@@ -101,12 +108,10 @@
                   <% } %>
                 </fieldset>
               </div>
-
               <div class="mb-3">
                 <label for="reviewComment" class="form-label fw-semibold">Comment</label>
                 <textarea name="reviews[feedback]" id="reviewComment" rows="4" class="form-control" placeholder="Write your experience..." required></textarea>
               </div>
-
               <div class="d-grid">
                 <button class="btn btn-success">Submit Review</button>
               </div>

@@ -52,7 +52,34 @@ const messSchema = Schema({
   isOpen :{
     type:Boolean,
     default :true
+  },
+  ownerName: {
+  type: String,
+  required: true
+  },
+  adharNumber: {
+    type: String,   // use String instead of Number to preserve leading zeros
+    required: true,
+    match: /^\d{12}$/  // exactly 12 digits
+  },
+  phoneNumber: {
+    type: String,   // use String instead of Number
+    required: true,
+    match: /^\d{10}$/  // exactly 10 digits
+  },
+  lat: {
+    type: Number,
+    required: true,
+    min: -90,
+    max: 90
+  },
+  lon: {
+    type: Number,
+    required: true,
+    min: -180,
+    max: 180
   }
+
 });
 
 // on Delete Cascade \/

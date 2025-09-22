@@ -1,5 +1,4 @@
 body{
-    /* font-family: "Plus Jakarta Sans","Sans Serif" !important; */
     display: flex;
     flex-direction: column;
 }
@@ -12,7 +11,7 @@ body{
 
 }
 .fa-solid {
-    color : #fe424d;
+    color : #207cf5;
     font-size:1rem
 }
 .nav-link{
@@ -28,18 +27,12 @@ body{
     color :#222222
 }
 
-.f-info-links,.f-info-socials,.f-info-brand{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  
-   
-}
+
 
 .f-info-socials i {
     margin-right: 1rem;
       font-size:2rem;
+      color: rgb(0, 119, 255);
 
 }
 .f-info{

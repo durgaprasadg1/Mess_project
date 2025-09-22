@@ -6,19 +6,24 @@ const reviewSchema = Joi.object({
     }).required()
 })
 
-const messSchema = Joi.object({ // ye ek object hai jo actual scehema ke field ko use krke validate krr skta hai.
-    // .required() means --> vo field required hai , allow() meas allowed hai min(minimum Value) itni honi chahiye
-    mess: Joi.object({
-        name:Joi.string().required(),
-        description:Joi.string().required(),
-        address:Joi.string().required(),
-        menu : Joi.string().allow("",null),
-        image: Joi.string().required(),
-        price:Joi.number().required().min(0),
-        owner : Joi.string().required(),
-        category: Joi.string().required(),  
-    }).required()
+const messSchema = Joi.object({
+  mess: Joi.object({
+    name: Joi.string().required(),
+    description: Joi.string().required(),
+    address: Joi.string().required(),
+    menu: Joi.string().allow("", null),
+    image: Joi.string().required(),
+    price: Joi.number().required().min(0),
+    owner: Joi.string().required(),
+    category: Joi.string().required(),
+    ownerName: Joi.string().required(),
+    adharNumber: Joi.string().pattern(/^\d{12}$/).required(),
+    phoneNumber: Joi.string().pattern(/^\d{10}$/).required(),
+    lat: Joi.number().required().min(-90).max(90),
+    lon: Joi.number().required().min(-180).max(180),
+  }).required()
 });
+
 
 const consumerSchema = Joi.object({ 
   consumer: Joi.object({
