@@ -45,10 +45,14 @@ const messSchema = Schema({
     required: true,
     minLength:2
   },
-  favourites:[{
-        type : String, 
-        default : ""
-  }],
+  // favourites:[{
+  //       type : String, 
+  //       default : ""
+  // }],
+  isOpen :{
+    type:Boolean,
+    default :true
+  }
 });
 
 // on Delete Cascade \/

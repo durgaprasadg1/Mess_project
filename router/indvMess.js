@@ -25,6 +25,7 @@ const {
   showingOrders,
   gettingPayment,
   verifyingPayment,
+  closeOpen
 } = require("../Controllers/individualMess.js");
 
 
@@ -47,5 +48,6 @@ router.post( "/booking", isLoggedIn, validateOrder, wrapAsync(gettingPayment));
 
 router.post( "/verify-payment" , wrapAsync(verifyingPayment));
 router.delete( '/orders/delete' , wrapAsync(deleteOrdersOfThisMess))
+router.get('/closeOpen', isLoggedIn,isOwner , wrapAsync(closeOpen))
 
 module.exports = router;

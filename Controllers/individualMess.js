@@ -200,3 +200,28 @@ module.exports.deleteOrdersOfThisMess = async (req, res) => {
     }
 };
 
+module.exports.closeOpen = async (req, res) => {
+  try {
+    let { id } = req.params;
+    let mess = await Mess.findById(id);
+    if (!mess) {
+      req.flash("error", "Mess not found");
+      return res.redirect("/mess");
+    }
+    mess.isOpen = !mess.isOpen;
+    res.locals.open = mess.isOpen;
+    await mess.save();
+    
+    if (mess.isOpen) {
+      req.flash("success", "Mess Opened");
+    } else {
+      req.flash("success", "Mess Closed");
+    }
+    // console.log(mess.isOpen)
+    res.redirect(`/mess/${id}`);
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong");
+    res.redirect(`/mess/${id}`);
+  }
+};

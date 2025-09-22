@@ -77,6 +77,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   res.locals.currentUser = req.user;
   res.locals.noOfMess = req.user?.mess ? req.user.mess.length : 0;
+  res.locals.open = true;
 
   next();
 });
