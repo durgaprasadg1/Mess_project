@@ -25,7 +25,9 @@
           <th scope="col">Mess</th>
           <th scope="col">Total Price</th>
           <th scope="col">Placed On</th>
+          <th scope="col">Cancel Order</th>
           <th scope="col">Status</th>
+                    
         </tr>
       </thead>
       <tbody>
@@ -46,6 +48,28 @@
               hour12: true,
               timeZone: "Asia/Kolkata"
             }) %>
+
+          </td>
+          <td>
+            <% if (!order.isTaken) { %>
+              <form method="post" action="/orders/<%=order._id%>/cancel?_method=DELETE">
+                  <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center px-3 py-1 fw-semibold shadow-sm"
+                    style="border-radius: 25px;" > Cancel Order
+                  </button>
+
+              </form>
+              
+                
+              
+            <% } else { %>
+              
+                <button type="submit"
+                  class="btn btn-danger btn-sm d-flex align-items-center justify-content-center px-3 py-1 fw-semibold shadow-sm"
+                  style="border-radius: 25px; transition: all 0.3s;" disabled>
+                  Cannot Cancel                
+                </button>
+              </form>
+            <% } %>
           </td>
           <td>
             <% if (order.done) { %>

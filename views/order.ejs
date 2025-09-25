@@ -24,6 +24,7 @@
           <th scope="col">Consumer</th>
           <th scope="col">Total Price</th>
           <th scope="col">Placed On</th>
+          <th scope="col">Taken</th>
           <th scope="col">Done</th>
         </tr>
       </thead>
@@ -49,15 +50,14 @@
             }) %>
 
           </td>
-
           <td>
-            <% if (order.done) { %>
+            <% if (order.isTaken) { %>
               <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center px-3 py-1 fw-semibold shadow-sm"
                 style="border-radius: 25px;" disabled>
                 <i class="fa-solid fa-check"></i>
               </button>
             <% } else { %>
-              <form method="POST" action="/orders/<%= order._id %>/done">
+              <form method="POST" action="/orders/<%= order._id %>/taken">
                 <button type="submit"
                   class="btn btn-danger btn-sm d-flex align-items-center justify-content-center px-3 py-1 fw-semibold shadow-sm"
                   style="border-radius: 25px; transition: all 0.3s;">
@@ -66,6 +66,27 @@
               </form>
             <% } %>
           </td>
+
+          <td>
+            <% if (order.done ) { %>
+              <button class="btn btn-success btn-sm d-flex align-items-center justify-content-center px-3 py-1 fw-semibold shadow-sm"
+                style="border-radius: 25px;" disabled>
+                <i class="fa-solid fa-check"></i>
+              </button>
+            <% } else { %>
+              <% if (order.isTaken ) { %>
+                <form method="POST" action="/orders/<%= order._id%>/done">
+                  <button type="submit"
+                    class="btn btn-danger btn-sm d-flex align-items-center justify-content-center px-3 py-1 fw-semibold shadow-sm"
+                    style="border-radius: 25px; transition: all 0.3s;">
+                    <i class="fa-solid fa-clock"></i>
+                  </button>
+                </form>
+             <% } %>
+            <% } %>
+          </td>
+          
+
         </tr>
         <% }) %>
       </tbody>

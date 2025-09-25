@@ -179,26 +179,27 @@ module.exports.verifyingPayment = async (req, res) => {
 
 
 module.exports.deleteOrdersOfThisMess = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const mess = await Mess.findById(id); 
-        if (!mess) {
-            req.flash("error", "Mess not found");
-            return res.redirect("/mess");
-        }
-        
-        mess.orders = []; 
-        
-        await mess.save();
-        req.flash("success", "All orders and their records cleared successfully.");
-        res.redirect(`/mess/${id}`); 
-        
-    } catch (err) {
-        console.error(err);
-        req.flash("error", "Something went wrong while deleting orders");
-        res.redirect(`/mess/${id}/orders`);
+  try {
+    const { id } = req.params;
+    const mess = await Mess.findById(id); 
+
+    if (!mess) {
+      req.flash("error", "Mess not found");
+      return res.redirect("/mess");
     }
+
+    mess.orders = mess.orders.filter(order => !order.done);
+    await mess.save();
+
+    req.flash("success", "Completed orders cleared successfully.");
+    res.redirect(`/mess/${id}`);
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong while deleting orders");
+    res.redirect("/mess");
+  }
 };
+
 
 module.exports.closeOpen = async (req, res) => {
   try {

@@ -1,53 +1,46 @@
 <%- layout("/layouts/boilerplate") %>
 <style>
-  .hover-shadow {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  .card-container {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
   }
-  .hover-shadow:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  .card-img-top {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  .hover-effect {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .hover-effect:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
   }
 </style>
 
 <div class="container my-5">
   <div class="row g-4">
     <% if (messes && messes.length > 0) { %>
-       <h2 class="text-center fw-bold mb-5 text-primary">Mess Near You</h2>
+      <h2 class="text-center fw-bold mb-5 text-primary">Mess Near You</h2>
       <% messes.forEach(mess => { %>
-        <div class="col-12 col-md-6 col-lg-4">
-          <a href="/mess/<%= mess.id %>" class="text-decoration-none text-dark">
-            <div class="card shadow-sm border-0  h-100 overflow-hidden hover-shadow transition">
-              <div class="position-relative">
+        <div class="col-12 col-md-6 col-lg-4 d-flex">
+          <a href="/mess/<%= mess.id %>" class="text-decoration-none text-dark d-flex w-100">
+            <div class="card shadow-sm border-0 w-100 h-100 hover-effect">
+              <div class="card-container">
                 <img
                   src="<%= mess.image.url %>"
-                  class="card-img-top rounded-3"
+                  class="card-img-top"
                   alt="<%= mess.name %>"
-                  style="object-fit: cover; height: 200px;"
                 />
-                <div class="card-img-overlay d-flex align-items-end p-2">
-                  <h5 class="card-title text-white bg-dark bg-opacity-50 px-2 py-1 rounded">
-                    <%= mess.name %>
-                  </h5>
-                </div>
-              </div>  
-
-              
-
-              <div class="card-body text-center">
-                <h6 class="fw-bold"><%= mess.name %></h6>
-                  <h6 class="card-title text-dark bg-opacity-50 px-2 py-1 rounded">
-                  ( <%= mess.category %> )
-                </h6>
-                <% if (mess.isOpen) { %>
-                  <h6 class="text-success">Opened</h6>
-                <% } %> 
-                 <% if (!mess.isOpen) { %>
-                  <h6 class="text-danger">Closed</h6>
-                <% } %> 
-
-                <p class="text-muted small mb-0">Click to view details</p>
               </div>
-              
+              <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                <h5 class="card-title fw-bold mb-1"><%= mess.name %></h5>
+                <p class="text-muted small mb-2"><%= mess.category %></p>
+                <span class="badge rounded-pill bg-<%= mess.isOpen ? 'success' : 'danger' %>">
+                  <%= mess.isOpen ? 'Open' : 'Closed' %>
+                </span>
+              </div>
             </div>
           </a>
         </div>
@@ -61,4 +54,3 @@
     <% } %>
   </div>
 </div>
-

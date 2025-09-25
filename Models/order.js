@@ -46,7 +46,12 @@ const orderSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isTaken: {
+      type: Boolean,
+      default: false,
+    },
   },
+
   { timestamps: true }
 );
 

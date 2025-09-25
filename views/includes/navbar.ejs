@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-md navbar-light bg-white sticky-top border-bottom shadow-sm py-2">
-  <div class="container">
-    <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center me-auto text-decoration-none" href="/mess" style="letter-spacing: 0.5px;">
-      <i class="fa-solid fa-utensils me-2" style="color: #ffc107; font-size: 1.4rem;"></i> MessMate
+<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top border-bottom py-3 shadow-sm">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand fw-bold fs-4 text-primary d-flex align-items-center me-auto text-decoration-none" href="/mess">
+      <i class="fa-solid fa-utensils me-2 initial-animate-icon" style="color: #007bff; font-size: 1.6rem;"></i> <span>MessMate</span>
     </a>
 
     <button
@@ -17,59 +17,59 @@
     </button>
 
     <div class="collapse navbar-collapse" id="messNavbar">
-      <ul class="navbar-nav me-auto ms-md-4">
+      <ul class="navbar-nav me-auto ms-lg-4">
         <li class="nav-item">
-          <a class="nav-link text-secondary fw-medium p-2 mx-1 rounded-pill" href="/mess">Home</a>
+          <a class="nav-link nav-link-custom" href="/mess">Home</a>
         </li>
         <% if(currentUser){ %>
         <li class="nav-item">
-          <a class="nav-link text-secondary fw-medium p-2 mx-1 rounded-pill" href="/mess/new">Add Your Mess</a>
+          <a class="nav-link nav-link-custom" target="_blank" href="/mess/new">Add Your Mess</a>
         </li>
         <% if(currentUser && noOfMess > 0){ %>
         <li class="nav-item">
-          <a class="nav-link text-secondary fw-medium p-2 mx-1 rounded-pill" href="/mess/<%= currentUser.mess[0] %>/orders">Orders</a>
+          <a class="nav-link nav-link-custom" href="/mess/<%= currentUser.mess[0] %>/orders">Orders</a>
         </li>
         <% } %>
         <li class="nav-item">
-          <a class="nav-link text-secondary fw-medium p-2 mx-1 rounded-pill" href="/consumer/<%= currentUser._id %>/History">History</a>
+          <a class="nav-link nav-link-custom" href="/consumer/<%= currentUser._id %>/History">History</a>
         </li>
         <% } %>
       </ul>
 
-      <form class="d-flex my-2 my-md-0 mx-3" method="get" action="/mess/search">
-        <div class="d-flex align-items-center bg-light rounded-pill border py-1 ps-3 shadow-sm">
-          <input type="search" name="search" placeholder="Search Mess..." id="search-input" class="form-control-plaintext p-0" style="width: 200px;" />
-          <button class="btn btn-link text-primary fs-5 p-0 me-2" type="submit">
+      <form class="d-flex my-3 my-lg-0 mx-lg-3 flex-grow-1 flex-lg-grow-0" method="get" action="/mess/search">
+        <div class="input-group search-input-group">
+          <input type="search" name="search" placeholder="Search Mess..." id="search-input" class="form-control search-input" />
+          <button class="btn btn-primary search-button" type="submit">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
       </form>
 
-      <ul class="navbar-nav">
+      <ul class="navbar-nav align-items-lg-center">
         <% if(currentUser){ %>
-        <div class="d-flex align-items-center bg-light p-2 rounded-pill mx-2 my-2 my-md-0 shadow-sm" id="profile" data-consumer-id="<%= currentUser._id %>">
-            <i class="fa-solid fa-user me-2 text-primary"></i>
-            <h6 class="m-0 fs-6 fw-semibold text-dark"><%= currentUser.username %></h6>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle profile-dropdown d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-consumer-id="<%= currentUser._id %>">
+            <i class="fa-solid fa-circle-user me-2 profile-icon"></i>
+            <span class="fw-semibold text-dark profile-username"><%= currentUser.username %></span>
+          </a>
+          <div id="profile-info-dropdown" class="dropdown-menu dropdown-menu-end p-3 shadow-lg border-0" aria-labelledby="profileDropdown">
+            <div class="text-center my-2">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
           </div>
+        </li>
 
-          <div id="profile-info" 
-            style="display:none; position:absolute; min-width:220px; z-index:1000;"
-            class="bg-white border p-3 rounded shadow-lg">
-          </div>
-
-        <li class="nav-item d-flex align-items-center">
-          <a
-            class="nav-link btn btn-outline-danger px-3 py-1 ms-2"
-            href="/login/logout"
-            >Log Out</a
-          >
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <a class="btn btn-danger-soft px-3 py-2 fw-medium w-100" href="/login/logout">Log Out</a>
         </li>
         <% } else { %>
-        <li class="nav-item">
-          <a class="nav-link" href="/signup">Sign Up</a>
+        <li class="nav-item me-lg-2 mt-2 mt-lg-0">
+          <a class="btn btn-outline-primary px-3 py-2 fw-medium w-100" href="/signup">Sign Up</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
+        <li class="nav-item mt-2 mt-lg-0">
+          <a class="btn btn-primary px-3 py-2 fw-medium w-100" href="/login">Login</a>
         </li>
         <% } %>
       </ul>
@@ -77,45 +77,260 @@
   </div>
 </nav>
 
-<script>
-// The original JavaScript is kept as is. The hover logic for showing/hiding the profile info is retained.
-document.addEventListener("DOMContentLoaded", () => {
-  const profile = document.getElementById("profile");
-  const infoDiv = document.getElementById("profile-info");
+<style>
+  :root {
+    --primary-color: #007bff; 
+    --primary-dark: #0056b3;
+    --secondary-text: #6c757d;
+    --hover-bg: #e9ecef;
+    --border-color: #dee2e6;
+    --danger-soft: #dc35451a;
+    --danger-soft-hover: #dc354533;
+  }
 
-  profile.addEventListener("mouseenter", async (e) => {
-    const consumerId = profile.getAttribute("data-consumer-id");
-    console.log(consumerId);
+  .navbar {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .navbar-brand .text-gradient {
+    background: linear-gradient(45deg, var(--primary-color), #00c6ff); 
+    -webkit-text-fill-color: transparent;
+  }
+
+  .navbar-brand .initial-animate-icon {
+    animation: bounceIn 0.8s ease-out;
+  }
+
+  @keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+
+
+  .nav-link-custom {
+    color: var(--secondary-text) !important;
+    font-weight: 500;
+    padding: 0.6rem 1rem !important;
+    margin: 0 0.25rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav-link-custom::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: all 0.3s ease-out;
+    transform: translateX(-50%);
+    border-radius: 2px;
+  }
+
+  .nav-link-custom:hover {
+    color: var(--primary-color) !important;
+    background-color: var(--hover-bg);
+  }
+
+  .nav-link-custom:hover::before {
+    width: 80%;
+  }
+
+  .nav-link-custom.active {
+    color: var(--primary-color) !important;
+    background-color: var(--hover-bg);
+  }
+
+  .nav-link-custom.active::before {
+    width: 80%;
+  }
+
+  .search-input-group {
+    max-width: 300px;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid var(--border-color);
+  }
+
+  .search-input {
+    border: none;
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .search-input:focus {
+    box-shadow: none;
+    border-color: transparent;
+  }
+
+  .search-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .search-button:hover {
+    background-color: var(--primary-dark);
+  }
+
+  .profile-dropdown {
+    color: var(--secondary-text) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease-in-out;
+    background-color: var(--hover-bg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .profile-dropdown:hover {
+    background-color: #e2e6ea;
+    color: var(--primary-color) !important;
+  }
+
+  .profile-icon {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+  }
+
+  .profile-username {
+    font-size: 0.95rem;
+    color: #343a40;
+  }
+
+  .profile-dropdown.show .profile-icon,
+  .profile-dropdown.show .profile-username {
+    color: var(--primary-dark);
+  }
+
+  .dropdown-menu {
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .dropdown-menu .text-danger {
+    font-size: 0.9rem;
+  }
+
+  .btn-danger-soft {
+    background-color: var(--danger-soft);
+    color: #dc3545;
+    border: 1px solid var(--danger-soft);
+    border-radius: 0.75rem;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .btn-danger-soft:hover {
+    background-color: var(--danger-soft-hover);
+    color: #dc3545;
+    border-color: #dc3545;
+  }
+
+  .btn-outline-primary {
+    border-radius: 0.75rem;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .btn-primary {
+    border-radius: 0.75rem;
+    transition: all 0.2s ease-in-out;
+  }
+
+  @media (min-width: 992px) {
+    .navbar-expand-lg .navbar-nav .nav-link-custom {
+      padding: 0.6rem 0.8rem !important;
+    }
+  }
+
+  @media (max-width: 991.98px) {
+    .search-input-group {
+      max-width: 100%;
+    }
+    .profile-dropdown {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .btn-danger-soft, .btn-outline-primary, .btn-primary {
+      margin-top: 0.5rem;
+    }
+  }
+
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const profileDropdownToggle = document.getElementById("profileDropdown");
+  const profileInfoDropdown = document.getElementById("profile-info-dropdown");
+
+  const setActiveNavLink = () => {
+    const navLinks = document.querySelectorAll('.nav-link-custom');
+    const currentPath = window.location.pathname;
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+
+      const linkHref = link.getAttribute('href');
+
+      if (linkHref === '/mess' && (currentPath === '/mess' || currentPath === '/')) {
+        link.classList.add('active');
+      }
+      else if (linkHref !== '/mess' && currentPath.startsWith(linkHref)) {
+        link.classList.add('active');
+      }
+    });
+  };
+
+  setActiveNavLink();
+
+  profileDropdownToggle.addEventListener("show.bs.dropdown", async (e) => {
+    const consumerId = profileDropdownToggle.getAttribute("data-consumer-id");
+    if (!consumerId) {
+      profileInfoDropdown.innerHTML = `<p class="text-danger mb-0">No user ID found.</p>`;
+      return;
+    }
+
+    profileInfoDropdown.innerHTML = `
+      <div class="text-center my-2">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    `;
+
     try {
       const res = await fetch(`/consumer/${consumerId}/info`);
       const data = await res.json();
 
       if (data.error) {
-        infoDiv.innerHTML = `<p class="text-danger">${data.error}</p>`;
+        profileInfoDropdown.innerHTML = `<p class="text-danger mb-0">${data.error}</p>`;
       } else {
-        infoDiv.innerHTML = `
-          <h5 class="fw-bold mb-2">${data.username}</h5>
-          <p class="mb-1"><b>Email:</b> ${data.email}</p>
-          <p class="mb-1"><b>Phone:</b> ${data.phone}</p>
-          <p class="mb-1"><b>Messes:</b> ${data.mess?.length || 0}</p>
-          <p class="mb-1"><b>Orders:</b> ${data.orders?.length || 0}</p>
-          <p class="mb-1"><b>Reviews:</b> ${data.reviews?.length || 0}</p>
+        profileInfoDropdown.innerHTML = `
+          <h5 class="fw-bold mb-2 text-primary">${data.username}</h5>
+          <p class="mb-1 text-secondary"><b>Email:</b> <span class="text-dark">${data.email}</span></p>
+          <p class="mb-1 text-secondary"><b>Phone:</b> <span class="text-dark">${data.phone}</span></p>
+          <p class="mb-1 text-secondary"><b>Messes:</b> <span class="badge bg-info-subtle text-info">${data.mess?.length || 0}</span></p>
+          <p class="mb-1 text-secondary"><b>Orders:</b> <span class="badge bg-success-subtle text-success">${data.orders?.length || 0}</span></p>
+          <p class="mb-0 text-secondary"><b>Reviews:</b> <span class="badge bg-warning-subtle text-warning">${data.reviews?.length || 0}</span></p>
         `;
       }
-
-      const rect = profile.getBoundingClientRect();
-      // Positioning is kept in JavaScript, relative to the profile element
-      infoDiv.style.top = rect.bottom + 10 + "px";
-      infoDiv.style.left = rect.left + "px";
-      infoDiv.style.display = "block";
     } catch (err) {
-      infoDiv.innerHTML = "<p class='text-danger'>Error fetching consumer info</p>";
-      infoDiv.style.display = "block";
+      console.error("Error fetching consumer info:", err);
+      profileInfoDropdown.innerHTML = "<p class='text-danger mb-0'>Error fetching consumer info</p>";
     }
-  });
-
-  profile.addEventListener("mouseleave", () => {
-    infoDiv.style.display = "none";
   });
 });
 </script>

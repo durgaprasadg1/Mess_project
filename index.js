@@ -82,7 +82,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res) => res.redirect("/mess"));
+app.get("/", (req, res) => res.render("home.ejs"));
 
 app.use("/mess", messRouter);          
 app.use("/signup", userRouter);        

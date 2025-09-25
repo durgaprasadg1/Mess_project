@@ -1,0 +1,155 @@
+<%- layout("/layouts/boilerplate") %>
+
+<style>
+  :root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6610f2;
+    --text-dark: #212529;
+    --text-light: #f8f9fa;
+  }
+
+#hero-section {
+  position: relative;
+  height: 100vh;
+  background: linear-gradient(to bottom, #ffffff, #f8f9fa); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #212529; 
+  overflow: hidden;
+}
+
+#hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://source.unsplash.com/1600x900/?indian-food,meal") center/cover no-repeat;
+  opacity: 0.15; 
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+  max-width: 900px;
+}
+
+.hero-content h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  color: #0d6efd; 
+}
+
+.hero-content p {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  margin-top: 1rem;
+  color: #495057;
+}
+
+.btn-custom {
+  background: #0d6efd;
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+.btn-custom:hover {
+  background: #1058f2;
+  transform: scale(1.05);
+  box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.2);
+}
+
+  .step-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .step-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 1.5rem 2.5rem rgba(0, 0, 0, 0.1);
+  }
+  .step-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+  }
+  .step-card:hover .step-icon {
+    transform: rotate(-10deg) scale(1.1);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 1rem;
+    padding: 4rem 2rem;
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.1);
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+</style>
+
+<section id="hero-section" class="container-fluid">
+  <div class="hero-content">
+    <h1>
+      Find Your Next Favorite Meal.
+      <span class="d-block">Hassle-Free.</span>
+    </h1>
+    <p class="lead">
+      Explore a world of tastes. Get up-to-date menus, prices, and reviews for messes near you.
+    </p>
+    <a href="/mess" class="btn btn-custom mt-3 shadow-lg">
+      <i class="bi bi-search me-2"></i>Find Messes Now
+    </a>
+  </div>
+</section>
+
+<section class="container my-5 py-5">
+  <h2 class="text-center fw-bold mb-5 text-primary">How It Works</h2>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="step-card text-center shadow-sm">
+        <i class="fa-solid fa-location-dot step-icon"></i>
+        <h5 class="fw-bold">1. Find Messes</h5>
+        <p class="text-muted">Use our search to instantly locate messes in your area.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="step-card text-center shadow-sm">
+        <i class="fa-solid fa-utensils step-icon"></i>
+        <h5 class="fw-bold">2. View Menus</h5>
+        <p class="text-muted">Browse daily menus and prices before you decide where to eat.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="step-card text-center shadow-sm">
+        <i class="fa-regular fa-face-grin-beam step-icon"></i>
+        <h5 class="fw-bold">3. Enjoy!</h5>
+        <p class="text-muted">Visit the mess and enjoy your meal, knowing exactly what to expect.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container my-5 text-center cta-section">
+  <h2 class="fw-bold mb-3">Your Next Meal is Waiting.</h2>
+  <p class="lead mb-4">Ready to explore delicious and affordable meals near you?</p>
+  <a href="/mess" class="btn btn-light btn-lg rounded-pill shadow-lg">
+    <i class="bi bi-arrow-right-circle me-2"></i>Start Your Search
+  </a>
+</section>
