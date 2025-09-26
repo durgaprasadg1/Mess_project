@@ -40,14 +40,13 @@ module.exports.cancelOrder = async (req, res) => {
   try {
     let { id } = req.params;
     let order = await Order.findByIdAndDelete(id);
-
     if (!order) {
       req.flash("error", "Order not found");
       return res.redirect("/orders");
     }
-
+    
     req.flash("success", "Order cancelled, refund will be processed soon");
-    res.redirect(`/mess/${order.mess}/orders`);
+    res.redirect(`/consumer/${req.user._id}/History`);
   } catch (err) {
     console.error(err);
     req.flash("error", "Something went wrong while cancelling the order");
