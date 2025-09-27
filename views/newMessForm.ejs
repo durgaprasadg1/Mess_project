@@ -7,6 +7,9 @@
         <div class="card-body p-4">
           <h3 class="text-center mb-4">Add New Mess</h3>
 
+          <small style="color: gray;">
+            Note: Please add mess when you are near mess. Your current location will be saved automatically with this Mess.
+          </small>
           <form
             method="post"
             action="/mess/new"
@@ -115,39 +118,8 @@
             </div>
             <div class="invalid-feedback">Invalid Phone Number</div>
 
-
-            <div class="mb-3">
-                <label for="lat" class="form-label fw-semibold">Latitude :</label>
-                <input
-                  type="number"
-                  id="lat"
-                  name="lat"
-                  class="form-control"
-                  step="any"
-                  min="-90"
-                  max="90"
-                  placeholder="Location Latitude"
-                  required
-                />
-              </div>
-              <div class="invalid-feedback">Given Invalid Latitude </div>
-
-
-              <div class="mb-3">
-                <label for="lon" class="form-label fw-semibold">Longitude :</label>
-                <input
-                  type="number"
-                  id="lon"
-                  name="lon"
-                  class="form-control"
-                  step="any"
-                  min="-180"
-                  max="180"
-                  placeholder="Location Longitude"
-                  required
-                />
-              </div>
-              <div class="invalid-feedback">Given Invalid Longitude </div>
+              <input type="hidden" id="lat" name="lat">
+              <input type="hidden" id="lon" name="lon">
 
 
             <div class="mb-3">
@@ -178,3 +150,17 @@
     </div>
   </div>
 </div>
+<script>
+
+navigator.geolocation.getCurrentPosition(
+  (pos) => {
+    document.getElementById("lat").value = pos.coords.latitude;
+    document.getElementById("lon").value = pos.coords.longitude;
+  },
+  (err) => {
+    console.error(err);
+    alert("Unable to fetch location. Please allow location access.");
+  }
+
+);
+</script>

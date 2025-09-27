@@ -83,14 +83,54 @@ module.exports.forgetPassWord = async (req, res) => {
     user.resetTokenExpiry = Date.now() + 3600000; 
     await user.save();
 
-    const link = `${process.env.LOCAL_URL}/login/reset/${user.resetToken}`;
+    const link = `${process.env.CLIENT_URL}/login/reset/${user.resetToken}`;
+    // const link = `${process.env.LOCAL_URL}/login/reset/${user.resetToken}`;
 
     await transporter.sendMail({
-      from: `"MessMate Support" <${process.env.MAIL_USER}>`,
-      to: user.email,
-      subject: "Password Reset Request",
-      html: `<p>Click <a href="${link}">here</a> to reset your password.</p>`
-    });
+  from: `"MessMate Support" <${process.env.MAIL_USER}>`,
+  to: user.email,
+  subject: "Password Reset Request - MessMate",
+  html: `
+    <div style="font-family: Arial, sans-serif; color: #333; background-color: #f9f9f9; padding: 20px;">
+      <div style="max-width: 600px; margin: auto; background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+        
+        <h2 style="color: #0d6efd; text-align: center;">🔐 Password Reset Request</h2>
+        
+        <p>Dear <b>${user.username || "User"}</b>,</p>
+        
+        <p>We received a request to reset the password for your <b>MessMate</b> account.  
+        If this was you, please click the button below to securely reset your password:</p>
+        
+        <div style="text-align: center; margin: 20px 0;">
+          <a href="${link}" 
+             style="background-color: #0d6efd; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; display: inline-block;">
+             Reset My Password
+          </a>
+        </div>
+        
+        <p>If the button above doesn’t work, copy and paste the link below into your browser:</p>
+        <p style="word-break: break-all; color: #555;">${link}</p>
+        
+        <hr style="margin: 20px 0;">
+        
+        <p style="font-size: 14px; color: #666;">
+          ⚠️ If you did not request this password reset, you can safely ignore this email.  
+          Your account will remain secure and no changes will be made.
+        </p>
+        
+        <p style="font-size: 14px; color: #666;">
+          This link is valid only for <b>1 hour</b> from the time it was sent.  
+          After that, you will need to request another password reset.
+        </p>
+        
+        <p style="margin-top: 30px;">Thanks,<br>
+        <b>The MessMate Support Team</b></p>
+        
+      </div>
+    </div>
+  `
+});
+
 
     req.flash("success", "Reset link sent to your email");
     res.redirect("/login");

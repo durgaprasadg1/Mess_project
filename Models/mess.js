@@ -45,10 +45,6 @@ const messSchema = Schema({
     required: true,
     minLength:2
   },
-  // favourites:[{
-  //       type : String, 
-  //       default : ""
-  // }],
   isOpen :{
     type:Boolean,
     default :true
@@ -58,14 +54,14 @@ const messSchema = Schema({
   required: true
   },
   adharNumber: {
-    type: String,   // use String instead of Number to preserve leading zeros
+    type: String,   
     required: true,
-    match: /^\d{12}$/  // exactly 12 digits
+    match: /^\d{12}$/  
   },
   phoneNumber: {
-    type: String,   // use String instead of Number
+    type: String,   
     required: true,
-    match: /^\d{10}$/  // exactly 10 digits
+    match: /^\d{10}$/  
   },
   lat: {
     type: Number,

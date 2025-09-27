@@ -20,7 +20,7 @@ module.exports.addNewMess = async(req,res)=>{
     let filename = req.file.filename;
     let {name,description,address,category, ownerName, adharNumber , phoneNumber, lat, lon} = req.body;
     let newMess = new Mess ({ name : name, description : description, address:address, category : category, 
-      ownerName : ownerName, adharNumber : adharNumber , phoneNumber : phoneNumber, lat : lat, lon : lon
+      ownerName : ownerName, adharNumber : adharNumber , phoneNumber : phoneNumber, lat : parseFloat(lat), lon : parseFloat(lon)
     });
     if(!newMess){
       req.flash("error","No mess Added!");
