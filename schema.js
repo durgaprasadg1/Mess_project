@@ -32,6 +32,13 @@ const consumerSchema = Joi.object({
     username: Joi.string().required(),
     phone: Joi.string().pattern(/^[0-9]{10}$/).required(),
     mess: Joi.array().items(Joi.string().hex().length(24)).optional(),
+    reviews: Joi.array().items(Joi.string().hex().length(24)).optional(),
+    orders: Joi.array().items(Joi.string().hex().length(24)).optional(),
+    isVerified: Joi.boolean().optional(),
+    verifyToken: Joi.string().optional(),
+    verifyTokenExpiry: Joi.date().optional(),
+    resetToken: Joi.string().optional(),
+    resetTokenExpiry: Joi.date().optional()
   }).required()
 });
 

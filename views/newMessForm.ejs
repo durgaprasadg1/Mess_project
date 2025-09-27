@@ -1,5 +1,23 @@
 <%- layout("/layouts/boilerplate") %>
 
+<div
+  id="loader"
+  class="d-flex justify-content-center align-items-center"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    z-index: 9999;
+    opacity: 1;
+  "
+>
+  <div class="spinner-grow text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
@@ -151,6 +169,12 @@
   </div>
 </div>
 <script>
+  window.addEventListener("load", function () {
+    console.log("Loaded");
+    document.getElementById("loader").style.opacity = "0";
+    document.getElementById("loader").style.zIndex = -99;
+  });
+
 
 navigator.geolocation.getCurrentPosition(
   (pos) => {
