@@ -19,9 +19,6 @@
 </div>
 <div class="container my-5 text-center">
     <h2>Booking: <%= mess.name %></h2>
-    <p>
-  Amount to Pay: ₹
-  <%= mess.orders.reduce((total, order) => total + order.noOfPlate * mess.price, 0) %>
 </p>
 
     <button id="rzp-button" class="btn btn-success">Pay Now</button>

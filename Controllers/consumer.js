@@ -33,7 +33,7 @@ module.exports.deleteHistory = async (req, res) => {
 
     if (!consumer.orders || consumer.orders.length === 0) {
       req.flash("error", "No orders found");
-      return res.redirect("/");
+      return res.redirect(`/consumer/${consumer._id}/history`);
     }
 
     consumer.orders = [];
