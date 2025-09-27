@@ -18,7 +18,6 @@ const orderSchema = new Schema(
       required: true,
     },
 
-    // Razorpay details
     razorpayOrderId: {
       type: String,
     },
@@ -29,19 +28,20 @@ const orderSchema = new Schema(
       type: String,
     },
 
-    // Payment status
     status: {
       type: String,
       enum: ["created", "pending", "paid", "failed"],
       default: "created",
     },
 
-    // Verification flag
     paymentVerified: {
       type: Boolean,
       default: false,
     },
-
+    noOfPlate:{
+      type:Number,
+      default:1
+    },
     done: {
       type: Boolean,
       default: false,

@@ -105,7 +105,8 @@ module.exports.showingOrders = async (req, res) => {
 
 module.exports.gettingPayment = async (req, res) => {
   let { id } = req.params;
-  let mess = await Mess.findById(id);
+  let { noOfPlate } = req.body;
+  let mess = await Mess.findById(id).populate("orders");
   if (!mess) {
     req.flash("error", "Mess not found");
     return res.redirect("/mess");
@@ -117,7 +118,7 @@ module.exports.gettingPayment = async (req, res) => {
   });
 
   const options = {
-    amount: mess.price * 100,
+    amount: mess.price * 100 * noOfPlate,
     currency: "INR",
     receipt: `receipt_${Date.now()}`,
   };
@@ -129,6 +130,7 @@ module.exports.gettingPayment = async (req, res) => {
     totalPrice: mess.price,
     status: "pending",
     razorpayOrderId: order.id,
+    noOfPlate: noOfPlate
   });
 
   await dbOrder.save();
@@ -188,7 +190,7 @@ module.exports.deleteOrdersOfThisMess = async (req, res) => {
       return res.redirect("/mess");
     }
 
-    mess.orders = mess.orders.filter(order => !order.done);
+    mess.orders = mess.orders.filter(order => !order.done && !order.isTaken);
     await mess.save();
 
     req.flash("success", "Completed orders cleared successfully.");
