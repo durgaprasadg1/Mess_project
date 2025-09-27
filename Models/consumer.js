@@ -8,7 +8,8 @@ const Review = require("./reviews");
 const consumerSchema = new Schema({
   email: {
     type: String,
-    required: true
+    required: true,
+    unique:true
   },
   mess: [{
     type: Schema.Types.ObjectId,
@@ -22,12 +23,25 @@ const consumerSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Order"
   }],
+
   phone: {
-    
   type: String,
   required: true,
   match: /^[0-9]{10}$/
   },
+  isVerified: { 
+    type: Boolean,
+    default: false
+   },
+
+  verifyToken: String,
+
+  verifyTokenExpiry: Date,
+
+  resetToken: String,
+  
+  resetTokenExpiry: Date
+
 
 });
 

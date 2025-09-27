@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router({mergeParams:true});
 const passport = require('passport');
-const { renderLoginForm, doingLogin, doingLogOut } = require('../Controllers/auth.js');
+const Consumer = require('../Models/consumer.js');
+const wrapAsync = require('../utils/wrapAsync.js')
+const { renderLoginForm, doingLogin, doingLogOut, forgetPassWord,resetToken, forgetFormRender, makingToken } = require('../Controllers/auth.js');
 
 router.get("/",renderLoginForm);
 router.post('/',    
@@ -10,4 +12,17 @@ router.post('/',
 
 router.get("/logout", doingLogOut);
 
-module.exports = router
+
+router.get("/forget", forgetFormRender);
+
+router.post("/forget", wrapAsync(forgetPassWord));
+
+
+router.get("/reset/:token",wrapAsync(makingToken));
+
+router.post("/reset/:token",wrapAsync( resetToken ))
+
+
+module.exports = router;
+
+
