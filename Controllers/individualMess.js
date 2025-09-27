@@ -107,6 +107,7 @@ module.exports.gettingPayment = async (req, res) => {
   let { id } = req.params;
   let { noOfPlate } = req.body;
   let mess = await Mess.findById(id).populate("orders");
+   
   if (!mess) {
     req.flash("error", "Mess not found");
     return res.redirect("/mess");
@@ -183,7 +184,7 @@ module.exports.verifyingPayment = async (req, res) => {
 module.exports.deleteOrdersOfThisMess = async (req, res) => {
   try {
     const { id } = req.params;
-    const mess = await Mess.findById(id); 
+    const mess = await Mess.findById(id).populate("orders"); 
 
     if (!mess) {
       req.flash("error", "Mess not found");
@@ -194,11 +195,11 @@ module.exports.deleteOrdersOfThisMess = async (req, res) => {
     await mess.save();
 
     req.flash("success", "Completed orders cleared successfully.");
-    res.redirect(`/mess/${id}`);
+    res.redirect(`/mess/${id}/orders`);
   } catch (err) {
     console.error(err);
     req.flash("error", "Something went wrong while deleting orders");
-    res.redirect("/mess");
+    res.redirect(`/mess/${id}/orders`);
   }
 };
 
