@@ -86,7 +86,7 @@
               <%= mess.isOpen ? "Close It" : "Open It" %>
             </a>
 
-            <form method="get" action="/mess/<%= mess._id %>/menu" class="flex-fill">
+            <form method="get" action="/mess/<%= mess._id %>/menu" class="flex-fill ">
               <button type="submit" class="btn btn-outline-primary w-100">
                 <i class="bi bi-plus-circle me-2"></i> Add Menu
               </button>
@@ -107,8 +107,10 @@
         </div>
       <% } %>
       <% if (mess.isOpen && mess.menu.length > 0) { %>
-            <form method="post" action="/mess/<%= mess._id %>/booking" class="flex-fill">
-              <input class="form-control mb-1" type="number" name="noOfPlate" id="noOfPlate">
+            <form novalidate method="post" action="/mess/<%= mess._id %>/booking" class="flex-fill needs-validation">
+              <input class="form-control mb-1" type="number" name="noOfPlate" id="noOfPlate" required>
+              <div class="invalid-feedback">Book atleast one plate</div>
+
               <button type="submit" class="btn btn-success w-100">
                 <i class="bi bi-calendar-check me-2"></i> Book Your Plate
               </button>
