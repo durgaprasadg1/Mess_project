@@ -61,12 +61,11 @@ module.exports.forgetFormRender = (req,res)=>{
 }
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",   // explicit Gmail host
-  port: 465,                // SSL port
-  secure: true,             // use SSL
+  host: "smtp.sendgrid.net",
+  port: 587,
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS, // <-- App Password, NOT your Gmail password
+    user: "apikey", // this is literally the string "apikey"
+    pass: process.env.SENDGRID_API_KEY,
   },
 });
 
