@@ -61,14 +61,14 @@ module.exports.forgetFormRender = (req,res)=>{
 }
 
 const transporter = nodemailer.createTransport({
-    
-  service: "gmail", 
+  host: "smtp.gmail.com",   // explicit Gmail host
+  port: 465,                // SSL port
+  secure: true,             // use SSL
   auth: {
-    user: process.env.MAIL_USER, 
-    pass: process.env.MAIL_PASS
-  }
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS, // <-- App Password, NOT your Gmail password
+  },
 });
-
 
 
 module.exports.forgetPassWord = async (req, res) => {
