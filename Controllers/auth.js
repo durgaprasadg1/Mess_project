@@ -61,13 +61,14 @@ module.exports.forgetFormRender = (req,res)=>{
 }
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.sendgrid.net",
-  port: 587,
+    
+  service: "gmail", 
   auth: {
-    user: "apikey", 
-    pass: process.env.SID_SENDGRID,
-  },
+    user: process.env.MAIL_USER, 
+    pass: process.env.MAIL_PASS
+  }
 });
+
 
 
 module.exports.forgetPassWord = async (req, res) => {
