@@ -108,6 +108,10 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error/error.ejs", { message });
 });
 
-app.listen(port, () =>
-  console.log(` Server running at http://localhost:${port}`)
-);
+if (process.env.RENDER) {
+  app.listen(port, () => {
+    console.log(`✅ Server running on Render at port ${port}`);
+  });
+}
+
+
