@@ -2,11 +2,20 @@ const Mess = require("../Models/mess");
 const Consumer = require("../Models/consumer")
 module.exports.showAllMess = async (req, res) => {
 
-  let messes = await Mess.find({});
+  let messes = await Mess.find({}).populate("reviews");
   if(!messes){
     req.flash("error", "No Mess Found");
     res.redirect("/");
   }
+  messes = messes.map(mess => {
+    let avgRating = 0;
+    if (mess.reviews && mess.reviews.length > 0) {
+      const total = mess.reviews.reduce((sum, review) => sum + review.rating, 0);
+      avgRating = (total / mess.reviews.length).toFixed(1);
+    }
+    return { ...mess.toObject(), avgRating };
+  });
+  3
   res.render("mess.ejs", { messes });
 }
 
