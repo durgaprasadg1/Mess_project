@@ -50,6 +50,9 @@ const orderSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    notified: { type: Boolean, default: false }, // to avoid multiple notifications
+    consumerSubscription: { type: Object } // this is the web push subscription object
+
   },
 
   { timestamps: true }

@@ -19,6 +19,7 @@ const userRouter = require("./router/signin");
 const loginRouter = require("./router/login");
 const orderRouter = require("./router/orders");
 const consumerRouter = require("./router/consumer");
+const webpush = require('web-push')
 
 
 const app = express();
@@ -33,6 +34,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(methodOverride("_method"));
+
+webpush.setVapidDetails(
+  "mailto:messmated@gmail.com",
+  process.env.VAPID_PUBLIC,
+  process.env.VAPID_PRIVATE
+);
 
 // const MONGO_URL = "mongodb://127.0.0.1:27017/MessManagement";
 const dbUrl = process.env.ATLASDB_URL;
@@ -89,7 +96,7 @@ app.use("/signup", userRouter);
 app.use("/login", loginRouter);         
 app.use("/mess/:id", indvMessRouter);   
 app.use("/orders/:id", orderRouter);   
-app.use("/consumer", consumerRouter);  
+app.use("/consumer/:id", consumerRouter);  
 
 app.all("*", (req, res) => {
   res.status(404).render("error/pagenotfound.ejs");

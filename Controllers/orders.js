@@ -1,5 +1,7 @@
 const Consumer = require("../Models/consumer.js");
 const Order = require("../Models/order.js");
+const webpush = require('web-push');
+
 
 module.exports.orderCompletion = async (req, res) => {
   let { id } = req.params;
@@ -14,18 +16,32 @@ module.exports.orderCompletion = async (req, res) => {
   res.redirect(`/mess/${order.mess}/orders`);
 }
 
+
 module.exports.takingOrder = async (req, res) => {
   try {
-    let { id } = req.params;
+    const { id } = req.params; 
+    const { consumerSubscription } = req.body; 
     let order = await Order.findById(id);
-
     if (!order) {
       req.flash("error", "Order not found");
       return res.redirect("/orders");
     }
-
+    if (consumerSubscription) {
+      order.consumerSubscription = consumerSubscription;
+    }
     order.isTaken = true;
     await order.save();
+
+    if (order.consumerSubscription) {
+      await webpush.sendNotification(
+        order.consumerSubscription,
+        JSON.stringify({
+          title: 'Order Update',
+          message: 'You have a new order!',
+          url: `/mess/${req.user.mess[0]}/orders`
+        })
+      );
+    }
 
     req.flash("success", "Order Taken");
     res.redirect(`/mess/${order.mess}/orders`);
@@ -35,6 +51,7 @@ module.exports.takingOrder = async (req, res) => {
     res.redirect("/orders");
   }
 };
+
 
 module.exports.cancelOrder = async (req, res) => {
   try {

@@ -5,16 +5,19 @@ module.exports.showHistory = async (req, res) => {
   try {
     let { id } = req.params;
     let consumer = await Consumer.findById(id).populate({
-      path: "orders",
-      populate: { path: "mess" } 
-    });
+    path: "orders",
+    populate: [
+      { path: "mess" },
+      { path: "consumer" }   
+    ]
+  });
 
     if (!consumer) {
       req.flash("error", "Consumer not found");
       return res.redirect("/");
     }
 
-    res.render("user/history.ejs", { orders: consumer.orders });
+    res.render("user/history.ejs", { orders: consumer.orders, consumerId : req.user._id });
   } catch (err) {
     console.error(err);
     req.flash("error", "Something went wrong");
