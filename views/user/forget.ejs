@@ -1,33 +1,59 @@
+<%- layout("/layouts/boilerplate") %>
+
+<style>
+  /* Global Background */
+  body {
+    background: #f8f9fa;
+  }
+
+  /* Card Styling */
+  .card {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+  .card-body {
+    padding: 2rem;
+  }
+
+  /* Button Styling */
+  .btn-primary {
+    background:  linear-gradient(135deg, #ff7300, #ffae00);
+    border: none;
+    border-radius: 50px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.15);
+  }
+
+  /* Link Hover Effect */
+  a.hover-primary:hover {
+ color: #f59506 !important;
+  }
+</style>
+
+<!-- Loader with smooth fade-out -->
 <div
   id="loader"
-  class="d-flex justify-content-center align-items-center"
-  style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    z-index: 9999;
-    opacity: 1;
-  "
->
-  <div class="spinner-grow text-primary" role="status">
+  class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 vw-100 vh-100 bg-white"
+  style="z-index: 9999; transition: opacity 0.5s ease;">
+  <div class="spinner-grow text-primary" role="status" style="width: 4rem; height: 4rem;">
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
-<% layout("/layouts/boilerplate") %>
 
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
-      <div class="card shadow-lg border-0 rounded-3">
-        <div class="card-body p-4 p-md-5">
-          <h3 class="text-center mb-4 fw-bold text-primary">
+      <div class="card shadow-lg rounded-4">
+        <div class="card-body">
+          <h3 class="text-center mb-4 fw-bold text-warning">
             <i class="bi bi-question-circle-fill me-2"></i> Forgot Password
           </h3>
           <p class="text-center text-muted mb-4">
-            Enter your account's email address and we will send you a link to reset your password.
+            Enter your account's email address below and we'll send you a link to reset your password.
           </p>
 
           <form action="/login/forget" method="POST" novalidate class="needs-validation">
@@ -45,14 +71,14 @@
             </div>
 
             <div class="d-grid">
-              <button type="submit" class="btn btn-primary btn-lg shadow-sm mt-3">
+              <button type="submit" class="btn btn-warning btn-lg shadow-sm mt-3">
                 <i class="bi bi-envelope-check me-2"></i> Send Reset Link
               </button>
             </div>
           </form>
           
           <div class="text-center mt-4">
-            <a href="/login" class="text-decoration-none small fw-semibold text-muted hover-primary">
+            <a href="/login" class="text-decoration-none small fw-semibold text-muted hover-warning">
               <i class="bi bi-arrow-left"></i> Back to Login
             </a>
           </div>
@@ -61,13 +87,12 @@
     </div>
   </div>
 </div>
+
 <script>
-   window.addEventListener("load", function () {
+  window.addEventListener("load", function () {
     const loader = document.getElementById("loader");
-    loader.style.transition = "opacity 0.5s ease";
     loader.style.opacity = "0";
     loader.style.zIndex = -99;
-
     setTimeout(() => loader.style.display = "none", 500);
   });
 </script>

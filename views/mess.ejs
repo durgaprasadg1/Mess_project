@@ -1,94 +1,121 @@
-
-<div
-  id="loader"
-  class="d-flex justify-content-center align-items-center"
-  style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    z-index: 9999;
-    opacity: 1;
-  "
->
-  <div class="spinner-grow text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-</div>
 <%- layout("/layouts/boilerplate") %>
+
 <style>
-  .card-container {
-    height: 200px;
-    position: relative;
+  :root {
+    --primary-color: #ff8c00;         /* warm orange */
+    --secondary-color: #ffb300;       /* light warm yellow */
+    --background-light: #fff7e6;      /* subtle cream */
+    --text-dark: #4d2600;             /* dark brown */
+    --hover-shadow: 0 1.5rem 2.5rem rgba(0, 0, 0, 0.1);
+  }
+
+  
+
+  .mess-card {
+    border: none;
+    border-radius: 1rem;
     overflow: hidden;
-  }
-  .card-img-top {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-  }
-  .hover-effect {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: white;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
   }
-  .hover-effect:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+
+  .mess-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--hover-shadow);
+  }
+
+  .mess-card img {
+    object-fit: cover;
+    height: 18rem;
+    width: 100%;
+  }
+
+  .mess-card-body {
+    padding: 1.5rem;
+  }
+
+  .mess-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+
+  .mess-description {
+    color: var(--text-dark);
+    margin-top: 0.5rem;
+  }
+
+  .mess-rating {
+    margin-top: 1rem;
+  }
+  
+
+  .mess-rating .badge {
+    font-size: 1rem;
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 0.5rem 0.8rem;
+    border-radius: 1rem;
+  }
+
+  .view-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .view-btn:hover {
+    transform: scale(1.05);
+    opacity: 0.95;
   }
 </style>
 
-
-<div class="container my-5">
-  <div class="row g-4">
-    <% if (messes && messes.length > 0) { %>
-    <h2 class="text-center fw-bold mb-5 text-primary">Mess Near You</h2>
-    <% messes.forEach(mess => { %>
-    <div class="col-12 col-md-6 col-lg-4 d-flex">
-      <a
-        href="/mess/<%= mess._id %>"
-        class="text-decoration-none text-dark d-flex w-100"
-      >
-        <div class="card shadow-sm border-0 w-100 h-100 hover-effect">
-          <div class="card-container">
-            <img
-              src="<%= mess.image.url %>"
-              class="card-img-top"
-              alt="<%= mess.name %>"
-            />
-          </div>
-          <div
-            class="card-body d-flex flex-column justify-content-center align-items-center text-center"
-          >
-            <h5 class="card-title fw-bold mb-1"><%= mess.name %></h5>
-            <p class="text-muted small mb-2"><%= mess.category %></p>
-            <p class="text-muted small mb-2"> <%= mess.address %></p>
-            <p class="text-muted  mb-2">⭐<%= mess.avgRating %> / 5 </p>
-            <span
-              class="badge rounded-pill bg-<%= mess.isOpen ? 'success' : 'danger' %>"
-            >
-              <%= mess.isOpen ? 'Open' : 'Closed' %>
-            </span>
+<section class="container py-5">
+  <h2 class="text-center fw-bold mb-5" style="color: var(--primary-color);">
+    Explore Our Messes
+  </h2>
+  
+  <% if (messes && messes.length > 0) { %>
+    <div class="row g-4">
+      <% messes.forEach(mess => { %>
+        <div class="col-md-6 col-lg-4">
+          <div class="card mess-card">
+            <% if (mess.image) { %>
+              <img src="<%= mess.image.url %>" alt="<%= mess.name %>">
+            <% } else { %>
+              <img src="https://source.unsplash.com/800x600/?restaurant" alt="Mess Image">
+            <% } %>
+            <div class="card-body mess-card-body">
+              <h5 class="mess-title"><%= mess.name %></h5>
+              <p class="mess-description">
+                <%= mess.description.length > 100 ? mess.description.substring(0,100) + '...' : mess.description %>
+              </p>
+              <p> <i class="fa-solid fa-location-dot text-secondary fs-5 me-1"></i><%= mess.address %></p>
+              <% if(mess.avgRating){ %>
+              <div class="mess-rating">
+                <span class="badge">
+                  <i class="fa fa-star me-1"></i>
+                  <%= mess.avgRating %> / 5
+                </span>
+              </div>
+              <% } %>
+              <div class="mt-3">
+                <a href="/mess/<%= mess._id %>" class="btn view-btn shadow-sm">
+                  View Details
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-      </a>
+      <% }) %>
     </div>
-    <% }) %> <% } else { %>
-    <div class="col-12">
-      <div class="alert alert-info text-center shadow-sm">
-        No messes available near you right now.
-      </div>
+  <% } else { %>
+    <div class="alert alert-info text-center">
+      No messes found.
     </div>
-    <% } %>
-  </div>
-</div>
-
-<script>
-   window.addEventListener("load", function () {
-    const loader = document.getElementById("loader");
-    loader.style.transition = "opacity 0.5s ease";
-    loader.style.opacity = "0";
-    loader.style.zIndex = -99;
-    setTimeout(() => loader.style.display = "none", 500);
-  });
-</script>
+  <% } %>
+</section>

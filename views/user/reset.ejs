@@ -1,62 +1,89 @@
+<%- layout("/layouts/boilerplate") %>
+
+<style>
+  body {
+    background: #f0f2f5;
+  }
+  
+  /* Container for the reset form */
+  .reset-container {
+    max-width: 500px;
+    margin: 3rem auto;
+    background: #fff;
+    padding: 2.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reset-heading {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: #f59506;
+    font-weight: bold;
+  }
+  
+  .form-control {
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #ff7300, #ffae00);
+    border: none;
+    border-radius: 4px;
+    padding: 0.75rem;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background:  linear-gradient(135deg, #ff7300, #ffae00);
+    transform: scale(1.02);
+  }
+</style>
+
+<!-- Loader with smooth fade-out -->
 <div
   id="loader"
-  class="d-flex justify-content-center align-items-center"
-  style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    z-index: 9999;
-    opacity: 1;
-  "
->
-  <div class="spinner-grow text-primary" role="status">
+  class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 vw-100 vh-100 bg-white"
+  style="z-index: 9999; transition: opacity 0.5s ease;">
+  <div class="spinner-grow text-primary" role="status" style="width: 4rem; height: 4rem;">
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
-<% layout("/layouts/boilerplate") %>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-8 col-lg-6">
-      <div class="card shadow-lg border-0 rounded-3">
-        <div class="card-body p-4 p-md-5">
-          <h3 class="text-center mb-4 fw-bold text-primary">
-            <i class="bi bi-key-fill me-2"></i> Reset Password
-          </h3>
-          <p class="text-center text-muted mb-4">
-            Enter your new password below.
-          </p>
+<div class="reset-container">
+  <h3 class="reset-heading">
+    <i class="bi bi-key-fill me-2"></i> Reset Password
+  </h3>
+  <p class="text-center text-muted mb-4">
+    Enter your new password below.
+  </p>
 
-          <form action="/login/reset/<%= token %>" method="POST" novalidate class="needs-validation">
-            <div class="mb-3">
-              <label for="password" class="form-label fw-semibold">New Password</label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                class="form-control"
-                placeholder="Enter new password"
-                required
-              />
-              <div class="invalid-feedback">Please enter your new password.</div>
-            </div>
-
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary btn-lg shadow-sm mt-3">
-                <i class="bi bi-check-circle-fill me-2"></i> Reset Password
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+  <form action="/login/reset/<%= token %>" method="POST" novalidate class="needs-validation">
+    <div class="mb-3">
+      <label for="password" class="form-label fw-semibold">New Password</label>
+      <input
+        type="password"
+        name="password"
+        id="password"
+        class="form-control"
+        placeholder="Enter new password"
+        required
+      />
+      <div class="invalid-feedback">Please enter your new password.</div>
     </div>
-  </div>
+
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary btn-lg shadow-sm mt-3">
+        <i class="bi bi-check-circle-fill me-2"></i> Reset Password
+      </button>
+    </div>
+  </form>
 </div>
+
 <script>
-   window.addEventListener("load", function () {
+  window.addEventListener("load", function () {
     const loader = document.getElementById("loader");
     loader.style.transition = "opacity 0.5s ease";
     loader.style.opacity = "0";

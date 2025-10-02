@@ -1,84 +1,118 @@
+<%- layout("/layouts/boilerplate") %>
+
+<style>
+  body {
+    background: #f0f2f5;
+  }
+  
+  /* Container for the login form */
+  .login-container {
+    max-width: 500px;
+    margin: 3rem auto;
+    background: #fff;
+    padding: 2.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-heading {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    color: #f59506;
+    font-weight: bold;
+  }
+  
+  .form-control {
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #ff7300, #ffae00);
+    border: none;
+    border-radius: 4px;
+    padding: 0.75rem;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #d96200, #db5b05);
+    transform: scale(1.02);
+  }
+  
+  .link {
+    text-decoration: none;
+    color: #ffbb00;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<!-- Loader with smooth fade-out -->
 <div
   id="loader"
-  class="d-flex justify-content-center align-items-center"
-  style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    z-index: 9999;
-    opacity: 1;
-  "
->
-  <div class="spinner-grow text-primary" role="status">
+  class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 vw-100 vh-100 bg-white"
+  style="z-index: 9999; transition: opacity 0.5s ease;">
+  <div class="spinner-grow text-primary" role="status" style="width: 4rem; height: 4rem;">
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
-<% layout("/layouts/boilerplate") %>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-8 col-lg-6"> <div class="card shadow-lg border-0 rounded-3">
-        <div class="card-body p-4 p-md-5">
-          <h3 class="text-center mb-4 fw-bold text-primary">
-            <i class="bi bi-lock-fill me-2"></i> Log In to MessMate
-          </h3>
+<div class="login-container">
+  <h3 class="login-heading">
+    <i class="bi bi-lock-fill me-2 text-warning"></i> Log In to MessMate
+  </h3>
 
-          <form novalidate class="needs-validation" method="post" action="/login">
-            <div class="mb-3">
-              <label for="username" class="form-label fw-semibold">Username</label>
-              <input
-                required
-                type="text"
-                name="username"
-                id="username"
-                class="form-control"
-                placeholder="Enter your username"
-              />
-              <div class="invalid-feedback">Username is required</div>
-            </div>
-
-            <div class="mb-2">
-              <label for="password" class="form-label fw-semibold d-flex justify-content-between">
-                <span>Password</span>
-               
-              </label>
-              <input
-                required
-                type="password"
-                name="password"
-                id="password"
-                class="form-control"
-                placeholder="Enter your password"
-              />
-              <div class="invalid-feedback">Password is required</div>
-               <a href="/login/forget" class="text-decoration-none small fw-normal text-muted hover-primary">
-                  Forgot Password?
-                </a>
-            </div>
-            
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary btn-lg shadow-sm mt-4">
-                <i class="bi bi-box-arrow-in-right me-2"></i> Log In
-              </button>
-            </div>
-          </form>
-
-          <div class="text-center mt-4">
-            <small class="text-muted">
-              Don’t have an account? 
-              <a href="/signup" class="text-decoration-none fw-semibold text-primary hover-dark">Sign Up</a>
-            </small>
-          </div>
-        </div>
-      </div>
+  <form novalidate class="needs-validation" method="post" action="/login">
+    <div class="mb-3">
+      <label for="username" class="form-label fw-semibold">Username</label>
+      <input
+        required
+        type="text"
+        name="username"
+        id="username"
+        class="form-control"
+        placeholder="Enter your username" />
+      <div class="invalid-feedback">Username is required</div>
     </div>
+
+    <div class="mb-2">
+      <label for="password" class="form-label fw-semibold d-flex justify-content-between">
+        <span>Password</span>
+      </label>
+      <input
+        required
+        type="password"
+        name="password"
+        id="password"
+        class="form-control"
+        placeholder="Enter your password" />
+      <div class="invalid-feedback">Password is required</div>
+      <a href="/login/forget" class="text-decoration-none small fw-normal text-muted link">
+        Forgot Password?
+      </a>
+    </div>
+
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary btn-lg shadow-sm mt-4">
+        <i class="bi bi-box-arrow-in-right me-2"></i> Log In
+      </button>
+    </div>
+  </form>
+
+  <div class="text-center mt-4">
+    <small class="text-muted">
+      Don’t have an account?
+      <a href="/signup" class="text-decoration-none fw-semibold link">Sign Up</a>
+    </small>
   </div>
 </div>
+
 <script>
-   window.addEventListener("load", function () {
+  window.addEventListener("load", function () {
     const loader = document.getElementById("loader");
     loader.style.transition = "opacity 0.5s ease";
     loader.style.opacity = "0";

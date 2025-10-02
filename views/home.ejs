@@ -1,88 +1,76 @@
+<%- layout("/layouts/boilerplate") %>
 
-<div
-  id="loader"
-  class="d-flex justify-content-center align-items-center"
-  style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    z-index: 9999;
-    opacity: 1;
-  "
->
-  <div class="spinner-grow text-primary" role="status">
+<!-- Loader -->
+<div id="loader" class="d-flex justify-content-center align-items-center" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff7e6; z-index: 9999; opacity: 1;">
+  <div class="spinner-grow text-warning" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
-<%- layout("/layouts/boilerplate") %>
 
 <style>
   :root {
-    --primary-color: #0d6efd;
-    --secondary-color: #6610f2;
-    --text-dark: #212529;
-    --text-light: #f8f9fa;
+    --primary-color: #ff8c00;         /* warm orange */
+    --secondary-color: #ffb300;       /* light warm yellow */
+    --text-dark: #4d2600;             /* dark brown */
+    --text-light: #fdf8f2;
   }
 
-#hero-section {
-  position: relative;
-  height: 100vh;
-  background: linear-gradient(to bottom, #ffffff, #f8f9fa); 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #212529; 
-  overflow: hidden;
-}
-
-#hero-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: url("https://source.unsplash.com/1600x900/?indian-food,meal") center/cover no-repeat;
-  opacity: 0.15; 
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  padding: 2rem;
-  max-width: 900px;
-}
-
-.hero-content h1 {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 800;
-  color: #0d6efd; 
-}
-
-.hero-content p {
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  margin-top: 1rem;
-  color: #495057;
-}
-
-.btn-custom {
-  background: #0d6efd;
-  color: white;
-  font-weight: 600;
-  border: none;
-  padding: 0.75rem 2rem;
-  border-radius: 50px;
-  transition: all 0.3s ease;
-}
-.btn-custom:hover {
-  background: #1058f2;
-  transform: scale(1.05);
-  box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.2);
-}
-
+  /* Hero Section */
+  #hero-section {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--text-dark);
+    overflow: hidden;
+    background: linear-gradient(to bottom, var(--text-light), #fff7e6);
+  }
+  #hero-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("https://source.unsplash.com/1600x900/?indian-food,meal") center/cover no-repeat;
+    filter: brightness(0.8);
+    opacity: 0.2;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    max-width: 900px;
+    animation: fadeInUp 1s ease-out;
+  }
+  .hero-content h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    color: var(--primary-color);
+  }
+  .hero-content p {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    margin-top: 1rem;
+    color: var(--text-dark);
+  }
+  .btn-custom {
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+  .btn-custom:hover {
+    background: var(--secondary-color);
+    transform: scale(1.05);
+    box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Steps Section */
   .step-card {
-    background: white;
+    background: #fff;
     border-radius: 1rem;
     padding: 2rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -100,29 +88,23 @@
   .step-card:hover .step-icon {
     transform: rotate(-10deg) scale(1.1);
   }
-
+  
   /* CTA Section */
   .cta-section {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
     border-radius: 1rem;
     padding: 4rem 2rem;
-    box-shadow: 0 1rem 2rem rgba(0,0,0,0.1);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 1s ease-out;
   }
-
-  /* Animations */
+  
+  /* Fade In Up Animation */
   @keyframes fadeInUp {
-    from {
-      transform: translateY(30px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
 </style>
-
 
 <section id="hero-section" class="container-fluid">
   <div class="hero-content">
@@ -131,7 +113,7 @@
       <span class="d-block">Hassle-Free.</span>
     </h1>
     <p class="lead">
-      Explore a world of tastes. Get up-to-date menus, prices, and reviews for messes near you.
+      Explore a world of tastes with up-to-date menus, affordable prices, and genuine reviews.
     </p>
     <a href="/mess" class="btn btn-custom mt-3 shadow-lg">
       <i class="bi bi-search me-2"></i>Find Messes Now
@@ -140,27 +122,27 @@
 </section>
 
 <section class="container my-5 py-5">
-  <h2 class="text-center fw-bold mb-5 text-primary">How It Works</h2>
+  <h2 class="text-center fw-bold mb-5" style="color: var(--primary-color);">How It Works</h2>
   <div class="row g-4">
     <div class="col-md-4">
       <div class="step-card text-center shadow-sm">
         <i class="fa-solid fa-location-dot step-icon"></i>
         <h5 class="fw-bold">1. Find Messes</h5>
-        <p class="text-muted">Use our search to instantly locate messes in your area.</p>
+        <p class="text-muted">Use our robust search to instantly locate messes in your area.</p>
       </div>
     </div>
     <div class="col-md-4">
       <div class="step-card text-center shadow-sm">
         <i class="fa-solid fa-utensils step-icon"></i>
         <h5 class="fw-bold">2. View Menus</h5>
-        <p class="text-muted">Browse daily menus and prices before you decide where to eat.</p>
+        <p class="text-muted">Browse daily menus and prices and decide your craving.</p>
       </div>
     </div>
     <div class="col-md-4">
       <div class="step-card text-center shadow-sm">
         <i class="fa-regular fa-face-grin-beam step-icon"></i>
         <h5 class="fw-bold">3. Enjoy!</h5>
-        <p class="text-muted">Visit the mess and enjoy your meal, knowing exactly what to expect.</p>
+        <p class="text-muted">Visit the mess with full confidence and relish your meal.</p>
       </div>
     </div>
   </div>
@@ -175,7 +157,7 @@
 </section>
 
 <script>
-   window.addEventListener("load", function () {
+  window.addEventListener("load", function () {
     const loader = document.getElementById("loader");
     loader.style.transition = "opacity 0.5s ease";
     loader.style.opacity = "0";
