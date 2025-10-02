@@ -65,7 +65,7 @@ module.exports.cancelOrder = async (req, res) => {
     req.flash("success", "Order cancelled, refund will be processed soon");
     res.redirect(`/consumer/${req.user._id}/History`);
   } catch (err) {
-    console.error(err);
+    console.error("Error In Cancelling the order : ",err);
     req.flash("error", "Something went wrong while cancelling the order");
     res.redirect("/orders");
   }
