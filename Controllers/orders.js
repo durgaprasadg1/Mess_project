@@ -70,3 +70,17 @@ module.exports.cancelOrder = async (req, res) => {
     res.redirect("/orders");
   }
 };
+
+module.exports.savingSubscription  =  async (req, res) => {
+  const { orderId, consumerSubscription } = req.body;
+  try {
+    await Order.updateOne(
+      { _id: orderId },
+      { $set: { consumerSubscription } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+}

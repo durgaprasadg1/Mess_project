@@ -4,7 +4,6 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
       userVisibleOnly: true,
       applicationServerKey: '<YOUR_PUBLIC_VAPID_KEY>'
     }).then(subscription => {
-      // Send subscription to server
       fetch('/api/save-subscription', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
