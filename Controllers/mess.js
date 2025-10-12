@@ -33,7 +33,7 @@ module.exports.addNewMess = async(req,res)=>{
     });
     if(!newMess){
       req.flash("error","No mess Added!");
-      res.redirect("/"); 
+      res.redirect("/mess"); 
     }
     newMess.owner = req.user._id;
     let consumer = await Consumer.findById(req.user._id);
