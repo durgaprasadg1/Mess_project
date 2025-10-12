@@ -79,12 +79,7 @@ module.exports.addedMenu = async (req, res) => {
     } else if (menutype === "nonVegMenu") {
       mess.nonVegMenu= menuItems;
     } 
-    mess.mealTime = mealTime
-
-    // Optional: Store meal time info if you want (currently not used)
-    // mess.mealTime = mealTime; // Only if you want to save it
-
-    // Step 5: Save updates
+    mess.mealTime = mealTime;
     await mess.save();
 
     req.flash("success", "Menu added successfully!");
