@@ -81,14 +81,12 @@
               <label for="category" class="form-label fw-semibold"
                 >Category :</label
               >
-              <input
-                type="text"
-                id="category"
-                name="category"
-                class="form-control"
-                placeholder="Veg / Non-Veg / Both"
-                required
-              />
+              <select name="category" id="category">
+                <option value="veg">Veg</option>
+                <option value="nonveg">Non-Veg</option>
+                <option value="both">Non-Veg + Veg</option>
+              </select>
+
             </div>
             <div class="mb-3">
               <label for="ownerName" class="form-label fw-semibold"></label>

@@ -25,23 +25,77 @@ module.exports.thatMess = async (req, res) => {
 };
 
 module.exports.renderMenu = async (req, res) => {
-  let { id } = req.params;
-  res.render("messMenu.ejs", { id });
+  try {
+    const { id } = req.params;
+    const mess = await Mess.findById(id);
+
+    if (!mess) {
+      req.flash("error", "Mess not found");
+      return res.redirect("/mess");
+    }
+    // console.log(mess);
+
+    res.render("messMenu.ejs", { id, mess });
+  } catch (err) {
+    console.error("Error loading mess menu:", err);
+    req.flash("error", "Something went wrong while loading the menu page.");
+    res.redirect("/mess");
+  }
 };
+
 
 module.exports.addedMenu = async (req, res) => {
   try {
     const { id } = req.params;
-    const { menu, price } = req.body; 
-    let mess = await Mess.findByIdAndUpdate(id, { menu: menu, price: price }, { new: true });
-    req.flash("success", "Menu Updated Successfully");
+    const { mealTime, menutype, menu, price } = req.body;
+
+    const mess = await Mess.findById(id);
+    if (!mess) {
+      req.flash("error", "Mess not found");
+      return res.redirect("/mess");
+    }
+
+    let menuItems = [];
+
+    if (Array.isArray(menu) && price) {
+      if(menutype === 'vegMenu'){
+        mess.vegPrice= price;
+      }
+      else{
+        mess.nonVegPrice = price;
+      }
+      menuItems = menu.map(item => item.trim()).filter(Boolean);
+    } else if (typeof menu === "string" && menu.trim() !== "") {
+      menuItems = [menu.trim()];
+    }
+
+    if (menuItems.length === 0) {
+      req.flash("error", "Please add at least one dish.");
+      return res.redirect(`/mess/${id}`);
+    }
+
+    if (menutype === "vegMenu") {
+      mess.vegMenu = menuItems
+    } else if (menutype === "nonVegMenu") {
+      mess.nonVegMenu= menuItems;
+    } 
+    mess.mealTime = mealTime
+
+    // Optional: Store meal time info if you want (currently not used)
+    // mess.mealTime = mealTime; // Only if you want to save it
+
+    // Step 5: Save updates
+    await mess.save();
+
+    req.flash("success", "Menu added successfully!");
     res.redirect(`/mess/${id}`);
   } catch (err) {
-    console.error(err);
-    req.flash("error", "Something went wrong while updating the menu");
-    res.redirect(`/mess/${id}`);
+    console.error("Error while adding menu:", err);
+    req.flash("error", "Something went wrong while updating the menu.");
+    res.redirect(`/mess/${req.params.id}`);
   }
 };
+
 
 module.exports.addReview = async (req, res) => {
   try{
@@ -117,9 +171,16 @@ module.exports.gettingPayment = async (req, res) => {
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_SECRET,
   });
-
+    let price = 0 ;
+    if(mess.category == 'veg'){
+      price= mess.vegPrice;
+    }
+    else{
+      price= mess.nonVegPrice;
+    }
   const options = {
-    amount: mess.price * 100 * noOfPlate,
+
+    amount: price * 100 * noOfPlate,
     currency: "INR",
     receipt: `receipt_${Date.now()}`,
   };
@@ -128,7 +189,7 @@ module.exports.gettingPayment = async (req, res) => {
   let dbOrder = new Order({
     mess: id,
     consumer: req.user._id,
-    totalPrice: mess.price,
+    totalPrice: options.amount,
     status: "pending",
     razorpayOrderId: order.id,
     noOfPlate: noOfPlate

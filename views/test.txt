@@ -1,0 +1,15 @@
+# Backup existing files
+Copy-Item -Path ".\views\show.ejs" -Destination ".\views\show.ejs.bak" -Force
+Copy-Item -Path ".\views\messMenu.ejs" -Destination ".\views\messMenu.ejs.bak" -Force
+
+# Write new views/show.ejs
+@'
+
+'@ | Out-File -FilePath ".\views\show.ejs" -Encoding utf8 -Force
+
+# Write new views/messMenu.ejs (owner menu editor)
+@'
+
+'@ | Out-File -FilePath ".\views\messMenu.ejs" -Encoding utf8 -Force
+
+Write-Output "Updated views/show.ejs and views/messMenu.ejs (backups created with .bak suffix)."

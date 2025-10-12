@@ -8,38 +8,61 @@ const messSchema = Schema({
         required : true,
         minLength :3,
     },
+    
     description : {
         type : String,
     },
+
     image :{
         url : {
             type:String,
         },
         filename:String
     },
+
     address :{
         type : String, 
     },
-    menu:[{
+
+    mealTime : {
+        type : String, 
+        default : ""
+    },
+
+    vegMenu:[{
         type : String, 
         default : ""
     }],
-    
-    price :Number,
+    vegPrice:{
+      type:Number
+    },
+    nonVegPrice:{
+      type:Number
+    },
+    nonVegMenu:[
+      {
+        type : String, 
+        default : ""
+    }
+    ],
+
     owner : {
         type : Schema.Types.ObjectId,
         ref:"Consumer",
     },
+
     reviews : [
     {
       type : Schema.Types.ObjectId,
       ref : "Review"
     }
   ],
+
   orders: [{
     type: Schema.Types.ObjectId,
     ref: "Order"
   }],
+
   category : {
     type  : String,
     required: true,
