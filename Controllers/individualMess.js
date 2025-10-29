@@ -43,11 +43,10 @@ module.exports.renderMenu = async (req, res) => {
   }
 };
 
-
 module.exports.addedMenu = async (req, res) => {
   try {
     const { id } = req.params;
-    const { mealTime, menutype, menu, price } = req.body;
+    const { mealTime, menutype, menu, price, dishes } = req.body;
 
     const mess = await Mess.findById(id);
     if (!mess) {
@@ -55,18 +54,60 @@ module.exports.addedMenu = async (req, res) => {
       return res.redirect("/mess");
     }
 
+    // New: support nested dishes structure (dishes -> items with price)
     let menuItems = [];
 
-    if (Array.isArray(menu) && price) {
-      if(menutype === 'vegMenu'){
-        mess.vegPrice= price;
+    const toArray = (v) => {
+      if (v === undefined || v === null) return [];
+      if (Array.isArray(v)) return v;
+      if (typeof v === "object") return Object.keys(v).map((k) => v[k]);
+      return [v];
+    };
+
+    if (dishes) {
+      const dishArray = toArray(dishes);
+      menuItems = dishArray
+        .map((d) => {
+          const dishName = d && d.name ? String(d.name).trim() : "";
+          const dishPriceRaw =
+            d && d.price !== undefined && d.price !== null ? d.price : 0;
+          const dishPrice = Number(dishPriceRaw) || 0;
+          const itemsRaw = toArray(d && d.items);
+          const items = itemsRaw
+            .map((it) => {
+              const itemName =
+                it && it.name
+                  ? String(it.name).trim()
+                  : typeof it === "string"
+                  ? String(it).trim()
+                  : "";
+              const rawPrice =
+                it && it.price !== undefined && it.price !== null
+                  ? it.price
+                  : 0;
+              const itemPrice = Number(rawPrice) || 0;
+              return { name: itemName, price: itemPrice };
+            })
+            .filter((i) => i.name);
+          return { name: dishName || "", price: dishPrice, items };
+        })
+        .filter((d) => d.name || (d.items && d.items.length > 0));
+      // root price still stored in vegPrice/nonVegPrice if provided
+      if (price) {
+        if (menutype === "vegMenu") mess.vegPrice = price;
+        else mess.nonVegPrice = price;
       }
-      else{
-        mess.nonVegPrice = price;
+    } else if (Array.isArray(menu) && menu.length) {
+      // backward compatibility: each menu entry is dish name string
+      if (price) {
+        if (menutype === "vegMenu") mess.vegPrice = price;
+        else mess.nonVegPrice = price;
       }
-      menuItems = menu.map(item => item.trim()).filter(Boolean);
+      menuItems = menu
+        .map((item) => ({ name: item.trim(), items: [] }))
+        .filter((d) => d.name);
     } else if (typeof menu === "string" && menu.trim() !== "") {
-      menuItems = [menu.trim()];
+      menuItems = [{ name: menu.trim(), items: [] }];
     }
 
     if (menuItems.length === 0) {
@@ -75,10 +116,10 @@ module.exports.addedMenu = async (req, res) => {
     }
 
     if (menutype === "vegMenu") {
-      mess.vegMenu = menuItems
+      mess.vegMenu = menuItems;
     } else if (menutype === "nonVegMenu") {
-      mess.nonVegMenu= menuItems;
-    } 
+      mess.nonVegMenu = menuItems;
+    }
     mess.mealTime = mealTime;
     await mess.save();
 
@@ -91,25 +132,23 @@ module.exports.addedMenu = async (req, res) => {
   }
 };
 
-
 module.exports.addReview = async (req, res) => {
-  try{
+  try {
     let { id } = req.params;
-  let mess = await Mess.findById(id);
-  let newReview = new Review(req.body.reviews);
-  newReview.author = req.user._id;
-  mess.reviews.push(newReview);
-  await newReview.save();
-  await mess.save();
-  await Consumer.findByIdAndUpdate(req.user._id, {
-    $push: { reviews: newReview._id },
-  });
-  req.flash("success", "New Review Saved");
-  res.redirect(`/mess/${mess._id}`)
-  }
-  catch{
-    req.flash("error","Rating Star is required.")
-    res.redirect(`/mess/${id}`)
+    let mess = await Mess.findById(id);
+    let newReview = new Review(req.body.reviews);
+    newReview.author = req.user._id;
+    mess.reviews.push(newReview);
+    await newReview.save();
+    await mess.save();
+    await Consumer.findByIdAndUpdate(req.user._id, {
+      $push: { reviews: newReview._id },
+    });
+    req.flash("success", "New Review Saved");
+    res.redirect(`/mess/${mess._id}`);
+  } catch {
+    req.flash("error", "Rating Star is required.");
+    res.redirect(`/mess/${id}`);
   }
 };
 
@@ -156,7 +195,7 @@ module.exports.gettingPayment = async (req, res) => {
   let { id } = req.params;
   let { noOfPlate } = req.body;
   let mess = await Mess.findById(id).populate("orders");
-   
+
   if (!mess) {
     req.flash("error", "Mess not found");
     return res.redirect("/mess");
@@ -166,28 +205,59 @@ module.exports.gettingPayment = async (req, res) => {
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_SECRET,
   });
-    let price = 0 ;
-    if(mess.category == 'veg'){
-      price= mess.vegPrice;
-    }
-    else{
-      price= mess.nonVegPrice;
-    }
-  const options = {
-
-    amount: price * 100 * noOfPlate,
-    currency: "INR",
-    receipt: `receipt_${Date.now()}`,
+  const razorpayOrderCreate = async (amount) => {
+    const options = {
+      amount: amount,
+      currency: "INR",
+      receipt: `receipt_${Date.now()}`,
+    };
+    return await razorpay.orders.create(options);
   };
-  const order = await razorpay.orders.create(options);
+
+  // Determine selected dish price (if provided) otherwise fallback to menu-level price
+  const { menutype, selectedDish } = req.body;
+  let pricePerPlate = 0;
+  let selectedDishName = "";
+
+  if (menutype && selectedDish !== undefined) {
+    const menuArray = mess[menutype] || [];
+    const idx = Number(selectedDish);
+    const dish = menuArray[idx];
+    if (dish) {
+      selectedDishName = typeof dish === "string" ? dish : dish.name || "";
+      if (typeof dish === "object" && dish.price && Number(dish.price) > 0) {
+        pricePerPlate = Number(dish.price);
+      } else if (
+        typeof dish === "object" &&
+        Array.isArray(dish.items) &&
+        dish.items.length
+      ) {
+        pricePerPlate = dish.items.reduce(
+          (s, it) => s + (Number(it.price) || 0),
+          0
+        );
+      }
+    }
+  }
+
+  if (!pricePerPlate) {
+    if (mess.category === "veg" || menutype === "vegMenu")
+      pricePerPlate = mess.vegPrice || 0;
+    else pricePerPlate = mess.nonVegPrice || 0;
+  }
+
+  const amount = Math.round(pricePerPlate * 100 * Number(noOfPlate || 1));
+  const order = await razorpayOrderCreate(amount);
 
   let dbOrder = new Order({
     mess: id,
     consumer: req.user._id,
-    totalPrice: options.amount,
+    totalPrice: amount,
     status: "pending",
     razorpayOrderId: order.id,
-    noOfPlate: noOfPlate
+    noOfPlate: noOfPlate,
+    selectedDishName,
+    selectedDishPrice: pricePerPlate,
   });
 
   await dbOrder.save();
@@ -236,18 +306,17 @@ module.exports.verifyingPayment = async (req, res) => {
   }
 };
 
-
 module.exports.deleteOrdersOfThisMess = async (req, res) => {
   try {
     const { id } = req.params;
-    const mess = await Mess.findById(id).populate("orders"); 
+    const mess = await Mess.findById(id).populate("orders");
 
     if (!mess) {
       req.flash("error", "Mess not found");
       return res.redirect("/mess");
     }
 
-    mess.orders = mess.orders.filter(order => !order.done && !order.isTaken);
+    mess.orders = mess.orders.filter((order) => !order.done && !order.isTaken);
     await mess.save();
 
     req.flash("success", "Completed orders cleared successfully.");
@@ -258,7 +327,6 @@ module.exports.deleteOrdersOfThisMess = async (req, res) => {
     res.redirect(`/mess/${id}/orders`);
   }
 };
-
 
 module.exports.closeOpen = async (req, res) => {
   try {
@@ -271,7 +339,7 @@ module.exports.closeOpen = async (req, res) => {
     mess.isOpen = !mess.isOpen;
     res.locals.open = mess.isOpen;
     await mess.save();
-    
+
     if (mess.isOpen) {
       req.flash("success", "Mess Opened");
     } else {
@@ -293,26 +361,69 @@ module.exports.editMessForm = async (req, res) => {
 
     if (!mess) {
       req.flash("error", "Mess not found, cannot edit");
-      return res.redirect("/mess"); 
+      return res.redirect("/mess");
     }
 
     res.render("Mess/editMessForm.ejs", { mess });
   } catch (err) {
     console.error(err);
     req.flash("error", "Something went wrong");
-    res.redirect("/mess"); 
+    res.redirect("/mess");
   }
 };
-
 
 module.exports.editTheMess = async (req, res) => {
   try {
     let { id } = req.params;
-    let { name, description, address, category } = req.body;
-    let mess = await Mess.findByIdAndUpdate(
-      id,{ name, description, address, category },
-      { new: true, runValidators: true }
+    let {
+      name,
+      description,
+      address,
+      category,
+      mealTime,
+      vegPrice,
+      nonVegPrice,
+      ownerName,
+      adharNumber,
+      phoneNumber,
+      lat,
+      lon,
+      isLimited,
+    } = req.body;
+
+    // normalize numeric and boolean fields
+    const update = {
+      name,
+      description,
+      address,
+      category,
+      mealTime: mealTime || "",
+      vegPrice:
+        vegPrice !== undefined && vegPrice !== ""
+          ? Number(vegPrice)
+          : undefined,
+      nonVegPrice:
+        nonVegPrice !== undefined && nonVegPrice !== ""
+          ? Number(nonVegPrice)
+          : undefined,
+      ownerName,
+      adharNumber,
+      phoneNumber,
+      lat: lat !== undefined && lat !== "" ? Number(lat) : undefined,
+      lon: lon !== undefined && lon !== "" ? Number(lon) : undefined,
+      isLimited:
+        isLimited === "on" || isLimited === true || isLimited === "true",
+    };
+
+    // remove undefined keys so validators don't override existing values unintentionally
+    Object.keys(update).forEach(
+      (k) => update[k] === undefined && delete update[k]
     );
+
+    let mess = await Mess.findByIdAndUpdate(id, update, {
+      new: true,
+      runValidators: true,
+    });
     if (!mess) {
       req.flash("error", "Mess not found");
       return res.redirect("/mess");
@@ -321,7 +432,7 @@ module.exports.editTheMess = async (req, res) => {
       let url = req.file.path;
       let filename = req.file.filename;
       mess.image = { url, filename };
-      await mess.save(); 
+      await mess.save();
     }
     req.flash("success", "Updates Saved");
     res.redirect(`/mess/${id}`);
@@ -331,4 +442,3 @@ module.exports.editTheMess = async (req, res) => {
     res.redirect(`/mess/${req.params.id}`);
   }
 };
-

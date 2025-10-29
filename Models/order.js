@@ -38,10 +38,12 @@ const orderSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    noOfPlate:{
-      type:Number,
-      default:1
+    noOfPlate: {
+      type: Number,
+      default: 1,
     },
+    selectedDishName: { type: String },
+    selectedDishPrice: { type: Number, default: 0 },
     done: {
       type: Boolean,
       default: false,
@@ -51,8 +53,7 @@ const orderSchema = new Schema(
       default: false,
     },
     notified: { type: Boolean, default: false }, // to avoid multiple notifications
-    consumerSubscription: { type: Object } // this is the web push subscription object
-
+    consumerSubscription: { type: Object }, // this is the web push subscription object
   },
 
   { timestamps: true }

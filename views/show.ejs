@@ -22,24 +22,20 @@
 <div class="container my-5">
   <div class="row justify-content-center">
     <div class="col-12 col-md-10 col-lg-9">
-
       <div class="card shadow-lg border-0 rounded-3 mb-4">
         <div class="card-body text-center p-4">
           <h2 class="fw-bold text-primary mb-2"><%= mess.name %></h2>
 
-          <h6 class="card-subtitle text-secondary bg-light px-3 py-1 rounded d-inline-block mb-3">
-            <% if (mess.category === 'both') { %>
-              Veg + Non-Veg
+          <h6
+            class="card-subtitle text-secondary bg-light px-3 py-1 rounded d-inline-block mb-3"
+          >
+            <% if (mess.category === 'both') { %> Veg + Non-Veg <% } else { %>
+            <%= mess.category %> <% } %> <% if (mess.isLimited) { %>
+            <b>[ Limited ]</b>
             <% } else { %>
-              <%= mess.category %>
-            <% } %>
-            <% if (mess.isLimited) { %>
-              <b>[ Limited ]</b>
-            <% } else { %>
-              <b>[ Unlimited ]</b>
+            <b>[ Unlimited ]</b>
             <% } %>
           </h6>
-
 
           <p class="text-muted mb-3"><%= mess.description %></p>
 
@@ -54,97 +50,68 @@
           </p>
 
           <p class="mb-3 text-muted">
-            <strong>Latitude:</strong> <%= mess.lat %> <br>
+            <strong>Latitude:</strong> <%= mess.lat %> <br />
             <strong>Longitude:</strong> <%= mess.lon %>
           </p>
 
           <% if (mess.isOpen) { %>
-            <span class="badge bg-success fs-6 px-3 py-2">Opened</span>
+          <span class="badge bg-success fs-6 px-3 py-2">Opened</span>
           <% } else { %>
-            <span class="badge bg-danger fs-6 px-3 py-2">Closed</span>
+          <span class="badge bg-danger fs-6 px-3 py-2">Closed</span>
           <% } %>
-
-         
         </div>
       </div>
 
-      <% if ((mess.vegMenu && mess.vegMenu.length > 0) || (mess.nonVegMenu && mess.nonVegMenu.length > 0)) { %>
+      <% if ((mess.vegMenu && mess.vegMenu.length > 0) || (mess.nonVegMenu &&
+      mess.nonVegMenu.length > 0)) { %>
       <div class="card shadow-sm border-0 rounded-3 mb-4">
         <div class="card-body p-4">
-          <h4 class="fw-bold mb-3 text-primary">
-            <i class="bi bi-egg-fried me-2"></i> Today's Menu (<%=mess.mealTime %>)
-          </h4>
-
-          <% if (mess.vegMenu && mess.vegMenu.length > 0) { %>
-          <h5 class="text-success mb-3 fw-semibold">
-            <i class="bi bi-leaf me-2"></i> Veg Menu
-          </h5>
-           <% if (mess.vegPrice) { %>
-            <p class="fw-bold fs-5  mt-3">Price: ₹ <%= mess.price %></p>
-          <% } %>
-          <div class="row g-3 mb-4">
-            <% mess.vegMenu.forEach(item => { if (item.trim() !== "") { %>
-              <div class="col-12 col-md-6">
-                <div class="card shadow-sm border-0 h-100">
-                  <div class="card-body d-flex align-items-center justify-content-center">
-                    <h6 class="mb-0 fw-semibold text-dark"><%= item %></h6>
-                  </div>
-                </div>
-              </div>
-            <% } }) %>
-          </div>
-
-          <% } %>
-
-          <hr>
-          <hr>
-
-          <% if (mess.nonVegMenu && mess.nonVegMenu.length > 0) { %>
-          <h5 class="text-danger mb-3 fw-semibold">
-            <i class="bi bi-basket2-fill me-2"></i> Non-Veg Menu
-          </h5>
-           <% if (mess.nonVegPrice) { %>
-            <p class="fw-bold fs-5  mt-3">Price: ₹ <%= mess.nonVegPrice %></p>
-          <% } %>
-          <div class="row g-3">
-            <% mess.nonVegMenu.forEach(item => { if (item.trim() !== "") { %>
-              <div class="col-12 col-md-6">
-                <div class="card shadow-sm border-0 h-100">
-                  <div class="card-body d-flex align-items-center justify-content-center">
-                    <h6 class="mb-0 fw-semibold text-dark"><%= item %></h6>
-                  </div>
-                </div>
-              </div>
-            <% } }) %>
-          </div>
-          <% } %>
+          <% if (isOwner) { %> <%- include('partials/ownerMenu', { mess: mess,
+          isOwner: isOwner }) %> <% } else { %> <%- include('partials/userMenu',
+          { mess: mess, isOwner: isOwner }) %> <% } %>
         </div>
       </div>
-      <% } %>
-
-      <% if (currentUser && isOwner && currentUser.mess && currentUser.mess.length > 0) { %>
+      <% } %> <% if (currentUser && isOwner && currentUser.mess &&
+      currentUser.mess.length > 0) { %>
       <div class="card mb-5">
         <div class="card-body p-4">
           <h4 class="fw-bold mb-3 text-primary">Owner Dashboard Actions</h4>
           <div class="d-grid gap-3 d-md-flex flex-wrap justify-content-between">
-            
-            <a href="/mess/<%= currentUser.mess[0]._id %>/closeOpen" 
-               class="btn btn-md <%= mess.isOpen ? 'btn-danger' : 'btn-success' %> flex-fill">
-              <i class="bi <%= mess.isOpen ? 'bi-x-circle' : 'bi-check-circle' %> me-2"></i>
+            <a
+              href="/mess/<%= currentUser.mess[0]._id %>/closeOpen"
+              class="btn btn-md <%= mess.isOpen ? 'btn-danger' : 'btn-success' %> flex-fill"
+            >
+              <i
+                class="bi <%= mess.isOpen ? 'bi-x-circle' : 'bi-check-circle' %> me-2"
+              ></i>
               <%= mess.isOpen ? "Close Mess Now" : "Open Mess Now" %>
             </a>
-            
-            <form method="get" action="/mess/<%= mess._id %>/menu" class="flex-fill">
-              <button type="submit" class="btn btn-md btn-outline-primary w-100">
+
+            <form
+              method="get"
+              action="/mess/<%= mess._id %>/menu"
+              class="flex-fill"
+            >
+              <button
+                type="submit"
+                class="btn btn-md btn-outline-primary w-100"
+              >
                 <i class="bi bi-list-columns-reverse me-2"></i> Update Menu
               </button>
             </form>
 
-            <a href="/mess/<%= mess._id %>/edit" class="btn btn-md btn-outline-warning flex-fill">
+            <a
+              href="/mess/<%= mess._id %>/edit"
+              class="btn btn-md btn-outline-warning flex-fill"
+            >
               <i class="bi bi-pencil-square me-2"></i> Edit Mess Info
             </a>
 
-            <form method="post" action="/mess/<%= mess._id %>/delete?_method=DELETE" class="flex-fill d-none d-md-block">
+            <form
+              method="post"
+              action="/mess/<%= mess._id %>/delete?_method=DELETE"
+              class="flex-fill d-none d-md-block"
+            >
               <button type="submit" class="btn btn-md btn-outline-danger w-100">
                 <i class="bi bi-trash me-2"></i> Delete Mess
               </button>
@@ -152,20 +119,70 @@
           </div>
         </div>
       </div>
-      <% } %>
-
-      <% if (mess.isOpen && (mess.vegMenu.length > 0 || mess.nonVegMenu.length > 0)) { %>
+      <% } %> <% if (mess.isOpen && (mess.vegMenu.length > 0 ||
+      mess.nonVegMenu.length > 0)) { %>
       <div class="card shadow-sm border-0 rounded-3 mb-4">
         <div class="card-body p-4">
-          <h4 class="fw-bold mb-3 text-primary"><i class="bi bi-calendar-check me-2"></i> Book Your Plate</h4>
-          <form method="post" action="/mess/<%= mess._id %>/booking" novalidate class="needs-validation">
+          <h4 class="fw-bold mb-3 text-primary">
+            <i class="bi bi-calendar-check me-2"></i> Book Your Plate
+          </h4>
+          <form
+            method="post"
+            action="/mess/<%= mess._id %>/booking"
+            novalidate
+            class="needs-validation"
+          >
             <label class="form-label fw-semibold mb-2">Number Of Plate</label>
-            <input type="number" class="form-control mb-2" name="noOfPlate" required placeholder="Number of plates">
+            <input
+              type="number"
+              class="form-control mb-2"
+              name="noOfPlate"
+              required
+              placeholder="Number of plates"
+            />
             <div class="col">
               <label class="form-label fw-semibold mb-2">Plate Type</label>
-              <select name="menutype" class="form-select mb-2" required>
+              <select
+                id="menutype"
+                name="menutype"
+                class="form-select mb-2"
+                required
+              >
                 <option value="vegMenu">Veg</option>
                 <option value="nonVegMenu">Non Veg</option>
+              </select>
+            </div>
+            <div class="col-12 mb-2">
+              <label class="form-label fw-semibold mb-2">Select Dish</label>
+              <select
+                id="vegDishSelect"
+                name="selectedDish"
+                class="form-select mb-2"
+              >
+                <% if (mess.vegMenu && mess.vegMenu.length) { %> <%
+                mess.vegMenu.forEach(function(d, idx){ %> <% if (typeof d ===
+                'string') { %>
+                <option value="<%= idx %>"><%= d %></option>
+                <% } else { %>
+                <option value="<%= idx %>">
+                  <%= d.name %> <% if (d.price) { %> — ₹ <%= d.price %><% } %>
+                </option>
+                <% } %> <% }) %> <% } %>
+              </select>
+              <select
+                id="nonvegDishSelect"
+                name="selectedDish"
+                class="form-select mb-2 d-none"
+              >
+                <% if (mess.nonVegMenu && mess.nonVegMenu.length) { %> <%
+                mess.nonVegMenu.forEach(function(d, idx){ %> <% if (typeof d ===
+                'string') { %>
+                <option value="<%= idx %>"><%= d %></option>
+                <% } else { %>
+                <option value="<%= idx %>">
+                  <%= d.name %> <% if (d.price) { %> — ₹ <%= d.price %><% } %>
+                </option>
+                <% } %> <% }) %> <% } %>
               </select>
             </div>
             <div class="invalid-feedback">Please enter at least one plate.</div>
@@ -176,26 +193,40 @@
           </form>
         </div>
       </div>
-      <% } %>
-
-
-      <% if (currentUser) { %>
+      <% } %> <% if (currentUser) { %>
       <div class="card shadow-sm border-0 rounded-3 mb-4">
         <div class="card-body p-4">
           <h4 class="fw-bold mb-3">Leave a Review</h4>
-          <form method="POST" action="/mess/<%= mess._id %>/review" novalidate class="needs-validation">
+          <form
+            method="POST"
+            action="/mess/<%= mess._id %>/review"
+            novalidate
+            class="needs-validation"
+          >
             <div class="mb-3">
               <label class="form-label fw-semibold">Rating</label>
               <fieldset class="starability-slot">
-                <% for (let i = 1; i <= 5; i++) { %>
-                  <input type="radio" id="rate-<%= i %>" name="reviews[rating]" value="<%= i %>" <%= i===1 ? "required" : "" %> />
-                  <label for="rate-<%= i %>" title="<%= i %> star"><%= i %> star</label>
+                <% for (let i = 1; i <= 5; i++) { %> <input type="radio"
+                id="rate-<%= i %>" name="reviews[rating]" value="<%= i %>" <%=
+                i===1 ? "required" : "" %> />
+                <label for="rate-<%= i %>" title="<%= i %> star"
+                  ><%= i %> star</label
+                >
                 <% } %>
               </fieldset>
             </div>
             <div class="mb-3">
-              <label for="reviewComment" class="form-label fw-semibold">Comment</label>
-              <textarea name="reviews[feedback]" id="reviewComment" rows="4" class="form-control" placeholder="Write your experience..." required></textarea>
+              <label for="reviewComment" class="form-label fw-semibold"
+                >Comment</label
+              >
+              <textarea
+                name="reviews[feedback]"
+                id="reviewComment"
+                rows="4"
+                class="form-control"
+                placeholder="Write your experience..."
+                required
+              ></textarea>
             </div>
             <div class="d-grid">
               <button class="btn btn-success">Submit Review</button>
@@ -210,24 +241,31 @@
           <h4 class="fw-bold mb-3">All Reviews</h4>
           <div class="row g-3">
             <% mess.reviews.forEach(rev => { %>
-              <div class="col-12 col-md-6">
-                <div class="card shadow-sm border-0 rounded-3 h-100">
-                  <div class="card-body">
-                    <h6 class="card-title text-primary mb-2">
-                      <i class="bi bi-person-circle me-1"></i> @<%= rev.author.username %>
-                    </h6>
-                    <p class="starability-result mb-2" data-rating="<%= rev.rating %>"></p>
-                    <p class="card-text"><%= rev.feedback %></p>
-                  </div>
-                  <div class="card-footer bg-transparent border-0 text-end">
-                    <form method="post" action="/mess/<%= mess._id %>/review/<%= rev._id %>?_method=DELETE">
-                      <button class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-trash"></i> Delete
-                      </button>
-                    </form>
-                  </div>
+            <div class="col-12 col-md-6">
+              <div class="card shadow-sm border-0 rounded-3 h-100">
+                <div class="card-body">
+                  <h6 class="card-title text-primary mb-2">
+                    <i class="bi bi-person-circle me-1"></i> @<%=
+                    rev.author.username %>
+                  </h6>
+                  <p
+                    class="starability-result mb-2"
+                    data-rating="<%= rev.rating %>"
+                  ></p>
+                  <p class="card-text"><%= rev.feedback %></p>
+                </div>
+                <div class="card-footer bg-transparent border-0 text-end">
+                  <form
+                    method="post"
+                    action="/mess/<%= mess._id %>/review/<%= rev._id %>?_method=DELETE"
+                  >
+                    <button class="btn btn-sm btn-outline-danger">
+                      <i class="bi bi-trash"></i> Delete
+                    </button>
+                  </form>
                 </div>
               </div>
+            </div>
             <% }) %>
           </div>
         </div>
@@ -237,11 +275,32 @@
 </div>
 
 <script>
-window.addEventListener("load", function () {
-  const loader = document.getElementById("loader");
-  loader.style.transition = "opacity 0.5s ease";
-  loader.style.opacity = "0";
-  loader.style.zIndex = -99;
-  setTimeout(() => loader.style.display = "none", 500);
-});
+  window.addEventListener("load", function () {
+    const loader = document.getElementById("loader");
+    loader.style.transition = "opacity 0.5s ease";
+    loader.style.opacity = "0";
+    loader.style.zIndex = -99;
+    setTimeout(() => (loader.style.display = "none"), 500);
+  });
+  document.addEventListener("DOMContentLoaded", function () {
+    const menutype = document.getElementById("menutype");
+    const vegSel = document.getElementById("vegDishSelect");
+    const nonvegSel = document.getElementById("nonvegDishSelect");
+    function toggle() {
+      if (!menutype) return;
+      if (menutype.value === "vegMenu") {
+        vegSel.classList.remove("d-none");
+        vegSel.disabled = false;
+        nonvegSel.classList.add("d-none");
+        nonvegSel.disabled = true;
+      } else {
+        vegSel.classList.add("d-none");
+        vegSel.disabled = true;
+        nonvegSel.classList.remove("d-none");
+        nonvegSel.disabled = false;
+      }
+    }
+    menutype && menutype.addEventListener("change", toggle);
+    toggle();
+  });
 </script>

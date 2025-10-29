@@ -1,116 +1,132 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Review = require('./reviews');
-const Order = require('./order');
+const Review = require("./reviews");
+const Order = require("./order");
 const messSchema = Schema({
-    name : {  
-        type :String,
-        required : true,
-        minLength :3,
-    },
-    
-    description : {
-        type : String,
-    },
+  name: {
+    type: String,
+    required: true,
+    minLength: 3,
+  },
 
-    image :{
-        url : {
-            type:String,
-        },
-        filename:String
-    },
+  description: {
+    type: String,
+  },
 
-    address :{
-        type : String, 
+  image: {
+    url: {
+      type: String,
     },
+    filename: String,
+  },
 
-    mealTime : {
-        type : String, 
-        default : ""
-    },
+  address: {
+    type: String,
+  },
 
-    vegMenu:[{
-        type : String, 
-        default : ""
-    }],
-    vegPrice:{
-      type:Number
-    },
-    nonVegPrice:{
-      type:Number
-    },
-    nonVegMenu:[
-      {
-        type : String, 
-        default : ""
-    }
-    ],
+  mealTime: {
+    type: String,
+    default: "",
+  },
 
-    owner : {
-        type : Schema.Types.ObjectId,
-        ref:"Consumer",
-    },
-
-    reviews : [
+  // Support nested menu structure: dishes with items and price per item
+  vegMenu: [
     {
-      type : Schema.Types.ObjectId,
-      ref : "Review"
-    }
+      name: { type: String, default: "" },
+      // optional dish level price
+      price: { type: Number, default: 0 },
+      items: [
+        {
+          name: { type: String, default: "" },
+          price: { type: Number, default: 0 },
+        },
+      ],
+    },
+  ],
+  vegPrice: {
+    type: Number,
+  },
+  nonVegPrice: {
+    type: Number,
+  },
+  nonVegMenu: [
+    {
+      name: { type: String, default: "" },
+      // optional dish level price
+      price: { type: Number, default: 0 },
+      items: [
+        {
+          name: { type: String, default: "" },
+          price: { type: Number, default: 0 },
+        },
+      ],
+    },
   ],
 
-  orders: [{
+  owner: {
     type: Schema.Types.ObjectId,
-    ref: "Order"
-  }],
-
-  category : {
-    type  : String,
-    required: true,
-    minLength:2
+    ref: "Consumer",
   },
-  isOpen :{
-    type:Boolean,
-    default :true
+
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],
+
+  orders: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
+    },
+  ],
+
+  category: {
+    type: String,
+    required: true,
+    minLength: 2,
+  },
+  isOpen: {
+    type: Boolean,
+    default: true,
   },
   ownerName: {
-  type: String,
-  required: true
+    type: String,
+    required: true,
   },
   adharNumber: {
-    type: String,   
+    type: String,
     required: true,
-    match: /^\d{12}$/  
+    match: /^\d{12}$/,
   },
   phoneNumber: {
-    type: String,   
+    type: String,
     required: true,
-    match: /^\d{10}$/  
+    match: /^\d{10}$/,
   },
   lat: {
     type: Number,
     required: true,
     min: -90,
-    max: 90
+    max: 90,
   },
   lon: {
     type: Number,
     required: true,
     min: -180,
-    max: 180
+    max: 180,
   },
-  isLimited:{
-    type:Boolean,
-    default :true
+  isLimited: {
+    type: Boolean,
+    default: true,
   },
-  
-
 });
 
 // on Delete Cascade \/
 
 messSchema.post("findOneAndDelete", async function (doc) {
   if (doc) {
-
     if (doc.reviews.length) {
       await Review.deleteMany({ _id: { $in: doc.reviews } });
     }
@@ -118,9 +134,8 @@ messSchema.post("findOneAndDelete", async function (doc) {
     if (doc.orders.length) {
       await Order.deleteMany({ _id: { $in: doc.orders } });
     }
-   
   }
 });
 
-const Mess = mongoose.model("Mess",messSchema);
+const Mess = mongoose.model("Mess", messSchema);
 module.exports = Mess;

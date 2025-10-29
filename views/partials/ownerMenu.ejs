@@ -1,0 +1,65 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <h4 class="fw-bold text-primary mb-0">
+    <i class="bi bi-egg-fried me-2"></i>  Menu
+  </h4>
+  
+</div>
+
+<div class="mb-3 text-muted small">
+  This preview shows current dishes and items. Use "Edit Full Menu" to manage
+  dishes/items in depth.
+</div>
+
+<div class="row g-3">
+  <% if (mess.vegMenu && mess.vegMenu.length > 0) { %>
+  <div class="col-12">
+    <h6 class="text-success mb-2">Veg</h6>
+    <ul class="mb-3">
+      <% mess.vegMenu.forEach(d => { %> <% if (typeof d === 'string') { %>
+      <li><%= d %></li>
+      <% } else { %>
+      <li>
+        <strong><%= d.name %></strong>
+        <% if (d.price) { %>
+        <span class="small text-muted"> — ₹ <%= d.price %></span>
+        <% } %> <% if (d.items && d.items.length > 0) { %>
+        <ul>
+          <% d.items.slice(0,3).forEach(it => { %>
+          <li><%= it.name %> — ₹ <%= it.price %></li>
+          <% }) %> <% if (d.items.length > 3) { %>
+          <li class="small text-muted">
+            and <%= d.items.length - 3 %> more...
+          </li>
+          <% } %>
+        </ul>
+        <% } %>
+      </li>
+      <% } %> <% }) %>
+    </ul>
+  </div>
+  <% } %> <% if (mess.nonVegMenu && mess.nonVegMenu.length > 0) { %>
+  <div class="col-12">
+    <h6 class="text-danger mb-2">Non-Veg</h6>
+    <ul class="mb-0">
+      <% mess.nonVegMenu.forEach(d => { %> <% if (typeof d === 'string') { %>
+      <li><%= d %></li>
+      <% } else { %>
+      <li>
+        <strong><%= d.name %></strong>
+        <% if (d.items && d.items.length > 0) { %>
+        <ul>
+          <% d.items.slice(0,3).forEach(it => { %>
+          <li><%= it.name %> — ₹ <%= it.price %></li>
+          <% }) %> <% if (d.items.length > 3) { %>
+          <li class="small text-muted">
+            and <%= d.items.length - 3 %> more...
+          </li>
+          <% } %>
+        </ul>
+        <% } %>
+      </li>
+      <% } %> <% }) %>
+    </ul>
+  </div>
+  <% } %>
+</div>

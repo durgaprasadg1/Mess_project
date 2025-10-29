@@ -91,6 +91,69 @@
               />
               <div class="invalid-feedback">Give a sophisticated name</div>
             </div>
+            
+            <div class="mb-3 row">
+              <div class="col-md-6">
+                <label for="mealTime" class="form-label fw-semibold">Meal Time</label>
+                <select id="mealTime" name="mealTime" class="form-select">
+                  <option value="" <%= !mess.mealTime ? 'selected' : '' %>>Select</option>
+                  <option value="lunch" <%= mess.mealTime === 'lunch' ? 'selected' : '' %>>Lunch</option>
+                  <option value="dinner" <%= mess.mealTime === 'dinner' ? 'selected' : '' %>>Dinner</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="isLimited" class="form-label fw-semibold">Limited Plates</label>
+                <div class="form-check form-switch mt-2">
+                  <input class="form-check-input" type="checkbox" id="isLimited" name="isLimited" <%= mess.isLimited ? 'checked' : '' %> />
+                  <label class="form-check-label" for="isLimited"><%= mess.isLimited ? 'Yes' : 'No' %></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <div class="col-md-6">
+                <label for="vegPrice" class="form-label fw-semibold">Veg Plate Price (₹)</label>
+                <input type="number" step="0.01" id="vegPrice" name="vegPrice" class="form-control" value="<%= typeof mess.vegPrice !== 'undefined' && mess.vegPrice !== null ? mess.vegPrice : '' %>" />
+              </div>
+              <div class="col-md-6">
+                <label for="nonVegPrice" class="form-label fw-semibold">Non-Veg Plate Price (₹)</label>
+                <input type="number" step="0.01" id="nonVegPrice" name="nonVegPrice" class="form-control" value="<%= typeof mess.nonVegPrice !== 'undefined' && mess.nonVegPrice !== null ? mess.nonVegPrice : '' %>" />
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="mb-3">
+              <label for="ownerName" class="form-label fw-semibold">Owner Name</label>
+              <input type="text" id="ownerName" name="ownerName" value="<%= mess.ownerName %>" class="form-control" required />
+              <div class="invalid-feedback">Owner name is required</div>
+            </div>
+
+            <div class="mb-3 row">
+              <div class="col-md-6">
+                <label for="adharNumber" class="form-label fw-semibold">Aadhar Number</label>
+                <input type="text" id="adharNumber" name="adharNumber" value="<%= mess.adharNumber %>" class="form-control" pattern="\d{12}" required />
+                <div class="invalid-feedback">Aadhar must be 12 digits</div>
+              </div>
+              <div class="col-md-6">
+                <label for="phoneNumber" class="form-label fw-semibold">Phone Number</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" value="<%= mess.phoneNumber %>" class="form-control" pattern="\d{10}" required />
+                <div class="invalid-feedback">Phone must be 10 digits</div>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <div class="col-md-6">
+                <label for="lat" class="form-label fw-semibold">Latitude</label>
+                <input type="number" step="0.000001" id="lat" name="lat" value="<%= mess.lat %>" class="form-control" required />
+                <div class="invalid-feedback">Latitude required</div>
+              </div>
+              <div class="col-md-6">
+                <label for="lon" class="form-label fw-semibold">Longitude</label>
+                <input type="number" step="0.000001" id="lon" name="lon" value="<%= mess.lon %>" class="form-control" required />
+                <div class="invalid-feedback">Longitude required</div>
+              </div>
+            </div>
 
             <div class="mb-3">
               <label for="image" class="form-label fw-semibold"
