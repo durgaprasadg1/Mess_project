@@ -28,8 +28,18 @@
           <h2 class="fw-bold text-primary mb-2"><%= mess.name %></h2>
 
           <h6 class="card-subtitle text-secondary bg-light px-3 py-1 rounded d-inline-block mb-3">
-            (<%= mess.category %>)
+            <% if (mess.category === 'both') { %>
+              Veg + Non-Veg
+            <% } else { %>
+              <%= mess.category %>
+            <% } %>
+            <% if (mess.isLimited) { %>
+              <b>[ Limited ]</b>
+            <% } else { %>
+              <b>[ Unlimited ]</b>
+            <% } %>
           </h6>
+
 
           <p class="text-muted mb-3"><%= mess.description %></p>
 

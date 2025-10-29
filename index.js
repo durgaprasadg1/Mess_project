@@ -42,8 +42,8 @@ webpush.setVapidDetails(
 );
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/MessManagement";
-// const dbUrl = MONGO_URL;
-const dbUrl = process.env.ATLASDB_URL;
+const dbUrl = MONGO_URL;
+// const dbUrl = process.env.ATLASDB_URL;
 mongoose
   .connect(dbUrl)
   .then(() => console.log(" MongoDB Connected"))

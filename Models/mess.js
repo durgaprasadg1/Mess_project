@@ -97,7 +97,12 @@ const messSchema = Schema({
     required: true,
     min: -180,
     max: 180
-  }
+  },
+  isLimited:{
+    type:Boolean,
+    default :true
+  },
+  
 
 });
 

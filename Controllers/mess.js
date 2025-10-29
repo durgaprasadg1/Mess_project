@@ -27,9 +27,9 @@ module.exports.addNewMess = async(req,res)=>{
   try{
     let url = req.file.path;
     let filename = req.file.filename;
-    let {name,description,address,category, ownerName, adharNumber , phoneNumber, lat, lon} = req.body;
+    let {name,description,address,category, ownerName, adharNumber , phoneNumber, lat, lon, limits} = req.body;
     let newMess = new Mess ({ name : name, description : description, address:address, category : category, 
-      ownerName : ownerName, adharNumber : adharNumber , phoneNumber : phoneNumber, lat : parseFloat(lat), lon : parseFloat(lon)
+      ownerName : ownerName, adharNumber : adharNumber , phoneNumber : phoneNumber, lat : parseFloat(lat), lon : parseFloat(lon), isLimited : limits
     });
     if(!newMess){
       req.flash("error","No mess Added!");
@@ -42,7 +42,7 @@ module.exports.addNewMess = async(req,res)=>{
     await consumer.save();
     await newMess.save();
     req.flash("success","New Mess Added !");
-    res.redirect("/"); 
+    res.redirect("/mess"); 
   }
   catch{
     req.flash("error","Failed In addition Of New Mess");
