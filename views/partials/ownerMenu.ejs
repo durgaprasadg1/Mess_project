@@ -5,10 +5,6 @@
   
 </div>
 
-<div class="mb-3 text-muted small">
-  This preview shows current dishes and items. Use "Edit Full Menu" to manage
-  dishes/items in depth.
-</div>
 
 <div class="row g-3">
   <% if (mess.vegMenu && mess.vegMenu.length > 0) { %>
@@ -22,10 +18,14 @@
         <strong><%= d.name %></strong>
         <% if (d.price) { %>
         <span class="small text-muted"> — ₹ <%= d.price %></span>
+        
         <% } %> <% if (d.items && d.items.length > 0) { %>
         <ul>
           <% d.items.slice(0,3).forEach(it => { %>
-          <li><%= it.name %> — ₹ <%= it.price %></li>
+          <li><%= it.name %> — ₹ <%= it.price %>
+          <% if (it.isLimited) { %>
+            <p class="text-danger">LIMITED</p>
+           <% } %></li>
           <% }) %> <% if (d.items.length > 3) { %>
           <li class="small text-muted">
             and <%= d.items.length - 3 %> more...
@@ -49,7 +49,10 @@
         <% if (d.items && d.items.length > 0) { %>
         <ul>
           <% d.items.slice(0,3).forEach(it => { %>
-          <li><%= it.name %> — ₹ <%= it.price %></li>
+          <li><%= it.name %> — ₹ <%= it.price %> 
+           <% if (it.isLimited) { %>
+            <p class="text-danger">LIMITED</p>
+           <% } %></li>
           <% }) %> <% if (d.items.length > 3) { %>
           <li class="small text-muted">
             and <%= d.items.length - 3 %> more...

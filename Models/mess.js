@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./reviews");
 const Order = require("./order");
+const Consumer = require("./consumer");
+
 const messSchema = Schema({
   name: {
     type: String,
@@ -29,16 +31,16 @@ const messSchema = Schema({
     default: "",
   },
 
-  // Support nested menu structure: dishes with items and price per item
   vegMenu: [
     {
       name: { type: String, default: "" },
-      // optional dish level price
-      price: { type: Number, default: 0 },
+      price: { type: Number, default: null },
       items: [
         {
           name: { type: String, default: "" },
-          price: { type: Number, default: 0 },
+          price: { type: Number, default: null },
+          isLimited: { type: Boolean, default: false },
+          limitCount: { type: Number, default: null },
         },
       ],
     },
@@ -52,16 +54,20 @@ const messSchema = Schema({
   nonVegMenu: [
     {
       name: { type: String, default: "" },
-      // optional dish level price
-      price: { type: Number, default: 0 },
+      price: { type: Number, default: null },
       items: [
         {
           name: { type: String, default: "" },
-          price: { type: Number, default: 0 },
+          price: { type: Number, default: null },
+          isLimited: { type: Boolean, default: false },
+          limitCount: { type: Number, default: null },
         },
       ],
     },
   ],
+
+  vegMenuRef: { type: Schema.Types.ObjectId, ref: "Menu", default: null },
+  nonVegMenuRef: { type: Schema.Types.ObjectId, ref: "Menu", default: null },
 
   owner: {
     type: Schema.Types.ObjectId,
@@ -123,7 +129,7 @@ const messSchema = Schema({
   },
 });
 
-// on Delete Cascade \/
+// on Delete Cascade 
 
 messSchema.post("findOneAndDelete", async function (doc) {
   if (doc) {
@@ -133,6 +139,20 @@ messSchema.post("findOneAndDelete", async function (doc) {
 
     if (doc.orders.length) {
       await Order.deleteMany({ _id: { $in: doc.orders } });
+    }
+    const Menu = require("./menu");
+    try {
+      await Menu.deleteMany({ mess: doc._id });
+    } catch (e) {
+      console.error("Error deleting related Menu docs:", e);
+    }
+    try {
+      await Consumer.updateMany(
+        { mess: doc._id },
+        { $pull: { mess: doc._id } }
+      );
+    } catch (e) {
+      console.error("Error removing mess references from consumers:", e);
     }
   }
 });

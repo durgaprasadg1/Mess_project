@@ -33,28 +33,23 @@
           <p>
             <strong>Mess:</strong> <%= order.mess ? order.mess.name : "N/A" %>
           </p>
-          <% if (order.selectedDishName || order.selectedDishPrice) { %>
-          <p>
-            <strong>Selected Dish:</strong> <%= order.selectedDishName ?
-            order.selectedDishName : 'N/A' %>
-          </p>
-          <p>
-            <strong>Price per Plate:</strong> ₹<%= typeof
-            order.selectedDishPrice !== 'undefined' && order.selectedDishPrice
-            !== null ? order.selectedDishPrice : (order.totalPrice || 0) %>
-          </p>
-          <% } else { %>
-          <!-- fallback: show menu type or totalPrice as before -->
-          <p>
-            <strong>Menu Type / Price:</strong> <%= order.menuType ?
-            order.menuType : (order.totalPrice ? '₹' + order.totalPrice : 'N/A')
-            %>
-          </p>
+          <% 
+            const totalRupees = order.totalPrice ? (Number(order.totalPrice) / 100) : 0;
+            const plates = Number(order.noOfPlate) || 1;
+            const perPlate = (typeof order.selectedDishPrice !== 'undefined' && order.selectedDishPrice !== null && Number(order.selectedDishPrice) > 0)
+              ? Number(order.selectedDishPrice)
+              : (plates ? (totalRupees / plates) : 0);
+          %>
+          <% if (order.selectedDishName) { %>
+          <p><strong>Selected Dish:</strong> <%= order.selectedDishName %></p>
           <% } %>
+          <p>
+            <strong>Price per Plate:</strong> ₹<%= perPlate ?
+            perPlate.toFixed(2) : '0.00' %>
+          </p>
           <p><strong>Total Plates:</strong> <%= order.noOfPlate %></p>
           <p>
-            <strong>Total Price:</strong> ₹<%= (order.selectedDishPrice ?
-            order.selectedDishPrice : order.totalPrice) * order.noOfPlate %>
+            <strong>Total Price:</strong> ₹<%= Number(totalRupees).toFixed(2) %>
           </p>
           <p class="mb-0"><strong>Placed On:</strong></p>
           <small class="text-muted">

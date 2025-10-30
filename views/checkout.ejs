@@ -33,20 +33,18 @@
                             body: JSON.stringify(response),
                         })
                         .then( res =>{
-                        // console.log(res);
 
                         if (res.ok) {
                           alert("Payment Done !");
                             window.location.href = res.url;
                         } else {
-                            // Verification failed (e.g., signature mismatch)
                             alert(data.message || "Payment verification failed!");
-                            window.location.href = '/mess'; // Redirect to home or mess list on failure
+                            window.location.href = '/mess';
                         }
                         })
                         .catch((res)=>{
                         alert("An unexpected error occurred. Please check the console.");
-                        window.location.href = '/mess'; // Fallback redirect
+                        window.location.href = '/mess'; 
                         });
                 },
               

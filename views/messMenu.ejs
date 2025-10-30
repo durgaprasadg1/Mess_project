@@ -144,9 +144,7 @@
             <% } %>
           </div>
 
-          <div id="menu-container">
-            <!-- Dishes will be injected here. Each dish has a name and multiple items (name + price) -->
-          </div>
+          <div id="menu-container"></div>
 
           <button
             type="button"
@@ -155,19 +153,6 @@
           >
             <i class="bi bi-plus-circle me-1"></i> Add Dish
           </button>
-
-          <!-- <div class="mb-3">
-            <label for="price" class="form-label fw-semibold">
-              Plate Price (₹)</label
-            >
-            <input
-              type="number"
-              class="form-control"
-              id="price"
-              name="price"
-              placeholder="Enter plate price "
-            />
-          </div> -->
 
           <div class="d-grid">
             <button type="submit" class="btn btn-primary btn-lg shadow-sm">
@@ -241,47 +226,87 @@
     const div = document.createElement("div");
     div.className = "d-flex gap-2 align-items-center mb-2";
     div.innerHTML = `
-      <input type="text" class="form-control" name="dishes[${dishIdx}][items][${itemIdx}][name]" placeholder="Item name (e.g. Sambar)" required />
-      <input type="number" step="0.01" class="form-control" name="dishes[${dishIdx}][items][${itemIdx}][price]" placeholder="Price (₹)" required />
-      <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeItem(this)">Remove item</button>
+      <input type="text" class="form-control item-name" name="dishes[${dishIdx}][items][${itemIdx}][name]" placeholder="Item name (e.g. Sambar)" required />
+      <input type="number" step="0.01" class="form-control item-price" name="dishes[${dishIdx}][items][${itemIdx}][price]" placeholder="Price (₹)" />
+      <div class="d-flex align-items-center gap-2">
+        <div class="form-check form-switch mb-0">
+          <input class="form-check-input" type="checkbox" id="d${dishIdx}i${itemIdx}limited" name="dishes[${dishIdx}][items][${itemIdx}][isLimited]" />
+          <label class="form-check-label small" for="d${dishIdx}i${itemIdx}limited">Limited</label>
+        </div>
+        <input type="number" min="1" class="form-control form-control-sm limit-count" name="dishes[${dishIdx}][items][${itemIdx}][limitCount]" placeholder="Limit" style="width:90px; display:none;" />
+        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeItem(this)">Remove</button>
+      </div>
     `;
     itemsContainer.appendChild(div);
     if (prefill) {
-      div.querySelector("input[type=text]").value = prefill.name || "";
-      div.querySelector("input[type=number]").value = prefill.price || "";
+      div.querySelector(".item-name").value = prefill.name || "";
+      if (typeof prefill.price !== "undefined" && prefill.price !== null)
+        div.querySelector(".item-price").value = prefill.price;
+      const priceInput = div.querySelector(".item-price");
+      const cb = div.querySelector("input[type=checkbox]");
+      const limitInput = div.querySelector(".limit-count");
+      console.log("Prefill" + prefill);
+      if (prefill.isLimited) {
+        console.log("isChecked" + prefill.isLimited);
+        if (cb) cb.checked = true;
+        if (limitInput) limitInput.style.display = "";
+        if (prefill.limitCount) limitInput.value = prefill.limitCount;
+        if (priceInput) priceInput.disabled = true;
+      } else {
+        if (priceInput) priceInput.disabled = false;
+      }
     }
   }
 
   function removeItem(btn) {
-    const item = btn.closest("div");
-    const itemsContainer = item.parentElement;
-    item.remove();
+    let itemRow = btn;
+    while (
+      itemRow &&
+      !itemRow.parentElement.classList.contains("items-container")
+    ) {
+      itemRow = itemRow.parentElement;
+    }
+    if (!itemRow) return;
+    const itemsContainer = itemRow.parentElement;
+    itemRow.remove();
 
     [...itemsContainer.children].forEach((child, idx) => {
-      const text = child.querySelector("input[type=text]");
-      const num = child.querySelector("input[type=number]");
-      const nameParts = text.name.split("]");
-
+      const nameInput = child.querySelector(".item-name");
+      const priceInput = child.querySelector(".item-price");
+      const limitedCheckbox = child.querySelector(".form-check-input");
+      const limitInput = child.querySelector(".limit-count");
       const dishIndex = itemsContainer.dataset.dishIndex;
-      text.name = `dishes[${dishIndex}][items][${idx}][name]`;
-      num.name = `dishes[${dishIndex}][items][${idx}][price]`;
+      if (nameInput)
+        nameInput.name = `dishes[${dishIndex}][items][${idx}][name]`;
+      if (priceInput)
+        priceInput.name = `dishes[${dishIndex}][items][${idx}][price]`;
+      if (limitedCheckbox)
+        limitedCheckbox.name = `dishes[${dishIndex}][items][${idx}][isLimited]`;
+      if (limitInput)
+        limitInput.name = `dishes[${dishIndex}][items][${idx}][limitCount]`;
     });
   }
 
-  // Remove a dish field
   function removeDish(button) {
     const dishEl = button.closest(".menu-item");
     dishEl.remove();
-    // No need to renumber dishes for server — express will parse arrays by numeric keys
   }
 
-  // Prefill existing menu if provided (mess)
-  window.addEventListener("DOMContentLoaded", () => {
-    const existing = JSON.stringify(mess || {});
-    if (existing && (existing.vegMenu || existing.nonVegMenu)) {
-      // determine menutype select default: keep as-is
+  document.addEventListener("change", (e) => {
+    if (
+      e.target &&
+      e.target.type === "checkbox" &&
+      e.target.name &&
+      e.target.name.includes("[isLimited]")
+    ) {
+      const innerDiv = e.target.closest("div");
+      const limitInput = innerDiv.querySelector(".limit-count");
+      const containerDiv = innerDiv.parentElement;
+      const priceInput = containerDiv
+        ? containerDiv.querySelector(".item-price")
+        : null;
+      if (limitInput) limitInput.style.display = e.target.checked ? "" : "none";
+      if (priceInput) priceInput.disabled = e.target.checked;
     }
-    // If there are existing dishes for the selected type, prefill when type selected. We'll default to rendering vegMenu if category allows.
-    // For simplicity render nothing; owner can add dishes or we can prefill based on server-rendered logic below.
   });
 </script>

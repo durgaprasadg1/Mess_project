@@ -2,9 +2,9 @@ const Order = require("../Models/order.js");
 const Consumer = require("../Models/consumer.js");
 const Mess = require("../Models/mess");
 const Review = require("../Models/reviews");
+const Menu = require("../Models/menu");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
-// let paymentDone = true;
 
 module.exports.thatMess = async (req, res) => {
   let { id } = req.params;
@@ -21,7 +21,8 @@ module.exports.thatMess = async (req, res) => {
   if (req.user && mess.owner) {
     isOwner = mess.owner.equals(req.user._id);
   }
-  res.render("show.ejs", { mess, isOwner });
+  let menu = mess.menu;
+  res.render("show.ejs", { mess, isOwner, menu });
 };
 
 module.exports.renderMenu = async (req, res) => {
@@ -33,7 +34,6 @@ module.exports.renderMenu = async (req, res) => {
       req.flash("error", "Mess not found");
       return res.redirect("/mess");
     }
-    // console.log(mess);
 
     res.render("messMenu.ejs", { id, mess });
   } catch (err) {
@@ -54,7 +54,6 @@ module.exports.addedMenu = async (req, res) => {
       return res.redirect("/mess");
     }
 
-    // New: support nested dishes structure (dishes -> items with price)
     let menuItems = [];
 
     const toArray = (v) => {
@@ -70,8 +69,11 @@ module.exports.addedMenu = async (req, res) => {
         .map((d) => {
           const dishName = d && d.name ? String(d.name).trim() : "";
           const dishPriceRaw =
-            d && d.price !== undefined && d.price !== null ? d.price : 0;
-          const dishPrice = Number(dishPriceRaw) || 0;
+            d && d.price !== undefined && d.price !== null && d.price !== ""
+              ? d.price
+              : null;
+          const dishPrice =
+            dishPriceRaw !== null ? Number(dishPriceRaw) || 0 : null;
           const itemsRaw = toArray(d && d.items);
           const items = itemsRaw
             .map((it) => {
@@ -82,29 +84,45 @@ module.exports.addedMenu = async (req, res) => {
                   ? String(it).trim()
                   : "";
               const rawPrice =
-                it && it.price !== undefined && it.price !== null
+                it &&
+                it.price !== undefined &&
+                it.price !== null &&
+                it.price !== ""
                   ? it.price
-                  : 0;
-              const itemPrice = Number(rawPrice) || 0;
-              return { name: itemName, price: itemPrice };
+                  : null;
+              const itemPrice =
+                rawPrice !== null ? Number(rawPrice) || 0 : null;
+              const isLimited =
+                it &&
+                (it.isLimited === "on" ||
+                  it.isLimited === true ||
+                  it.isLimited === "true");
+              const limitCount =
+                it && it.limitCount !== undefined && it.limitCount !== ""
+                  ? Number(it.limitCount)
+                  : null;
+              return {
+                name: itemName,
+                price: itemPrice,
+                isLimited: !!isLimited,
+                limitCount,
+              };
             })
             .filter((i) => i.name);
           return { name: dishName || "", price: dishPrice, items };
         })
         .filter((d) => d.name || (d.items && d.items.length > 0));
-      // root price still stored in vegPrice/nonVegPrice if provided
       if (price) {
         if (menutype === "vegMenu") mess.vegPrice = price;
         else mess.nonVegPrice = price;
       }
     } else if (Array.isArray(menu) && menu.length) {
-      // backward compatibility: each menu entry is dish name string
       if (price) {
         if (menutype === "vegMenu") mess.vegPrice = price;
         else mess.nonVegPrice = price;
       }
       menuItems = menu
-        .map((item) => ({ name: item.trim(), items: [] }))
+        .map((item) => ({ name: item.trim(), price: null, items: [] }))
         .filter((d) => d.name);
     } else if (typeof menu === "string" && menu.trim() !== "") {
       menuItems = [{ name: menu.trim(), items: [] }];
@@ -122,6 +140,25 @@ module.exports.addedMenu = async (req, res) => {
     }
     mess.mealTime = mealTime;
     await mess.save();
+
+    // Upsert a Menu document so menus live in their own collection for later use
+    try {
+      if (menutype) {
+        const menuDoc = await Menu.findOneAndUpdate(
+          { mess: id, menutype },
+          { mess: id, menutype, mealTime: mealTime || "", dishes: menuItems },
+          { upsert: true, new: true, setDefaultsOnInsert: true }
+        );
+        // store reference on Mess for easy lookup
+        if (menuDoc) {
+          if (menutype === "vegMenu") mess.vegMenuRef = menuDoc._id;
+          if (menutype === "nonVegMenu") mess.nonVegMenuRef = menuDoc._id;
+          await mess.save();
+        }
+      }
+    } catch (e) {
+      console.error("Failed to upsert Menu doc:", e);
+    }
 
     req.flash("success", "Menu added successfully!");
     res.redirect(`/mess/${id}`);
@@ -163,10 +200,16 @@ module.exports.deleteReview = async (req, res) => {
 };
 
 module.exports.deleteThatMess = async (req, res) => {
-  let { id } = req.params;
-  await Mess.findByIdAndDelete(id);
-  req.flash("success", "Deleted Succesfully");
-  res.redirect("/mess");
+  try {
+    const { id } = req.params;
+    await Mess.findByIdAndDelete(id);
+    req.flash("success", "Deleted successfully");
+    res.redirect("/mess");
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Something went wrong while deleting");
+    res.redirect("/mess");
+  }
 };
 
 module.exports.showingOrders = async (req, res) => {
@@ -183,6 +226,7 @@ module.exports.showingOrders = async (req, res) => {
     }
 
     let orders = mess.orders;
+    let dish = mess.menu;
     res.render("order.ejs", { orders });
   } catch (err) {
     console.error(err);
@@ -214,28 +258,47 @@ module.exports.gettingPayment = async (req, res) => {
     return await razorpay.orders.create(options);
   };
 
-  // Determine selected dish price (if provided) otherwise fallback to menu-level price
   const { menutype, selectedDish } = req.body;
   let pricePerPlate = 0;
   let selectedDishName = "";
 
   if (menutype && selectedDish !== undefined) {
-    const menuArray = mess[menutype] || [];
+    let menuArray = mess[menutype] || [];
+    let menuDoc = null;
+    if (menutype === "vegMenu" && mess.vegMenuRef) {
+      menuDoc = await Menu.findById(mess.vegMenuRef);
+    } else if (menutype === "nonVegMenu" && mess.nonVegMenuRef) {
+      menuDoc = await Menu.findById(mess.nonVegMenuRef);
+    } else {
+      // fallback: try to find any Menu doc for this mess and menutype
+      menuDoc = await Menu.findOne({ mess: id, menutype });
+    }
+    if (menuDoc && Array.isArray(menuDoc.dishes) && menuDoc.dishes.length) {
+      menuArray = menuDoc.dishes;
+    }
     const idx = Number(selectedDish);
     const dish = menuArray[idx];
     if (dish) {
       selectedDishName = typeof dish === "string" ? dish : dish.name || "";
-      if (typeof dish === "object" && dish.price && Number(dish.price) > 0) {
+      if (
+        typeof dish === "object" &&
+        dish.price !== undefined &&
+        dish.price !== null &&
+        Number(dish.price) > 0
+      ) {
         pricePerPlate = Number(dish.price);
       } else if (
         typeof dish === "object" &&
         Array.isArray(dish.items) &&
         dish.items.length
       ) {
-        pricePerPlate = dish.items.reduce(
-          (s, it) => s + (Number(it.price) || 0),
-          0
-        );
+        // sum only items that have a numeric price
+        pricePerPlate = dish.items.reduce((s, it) => {
+          if (it && it.price !== undefined && it.price !== null)
+            return s + (Number(it.price) || 0);
+          return s;
+        }, 0);
+        // if sum is 0, leave pricePerPlate as 0 so fallback can apply
       }
     }
   }
@@ -255,7 +318,7 @@ module.exports.gettingPayment = async (req, res) => {
     totalPrice: amount,
     status: "pending",
     razorpayOrderId: order.id,
-    noOfPlate: noOfPlate,
+    noOfPlate: Number(noOfPlate) || 1,
     selectedDishName,
     selectedDishPrice: pricePerPlate,
   });
@@ -345,7 +408,6 @@ module.exports.closeOpen = async (req, res) => {
     } else {
       req.flash("success", "Mess Closed");
     }
-    // console.log(mess.isOpen)
     res.redirect(`/mess/${id}`);
   } catch (err) {
     console.error(err);
@@ -391,7 +453,6 @@ module.exports.editTheMess = async (req, res) => {
       isLimited,
     } = req.body;
 
-    // normalize numeric and boolean fields
     const update = {
       name,
       description,
@@ -415,7 +476,6 @@ module.exports.editTheMess = async (req, res) => {
         isLimited === "on" || isLimited === true || isLimited === "true",
     };
 
-    // remove undefined keys so validators don't override existing values unintentionally
     Object.keys(update).forEach(
       (k) => update[k] === undefined && delete update[k]
     );

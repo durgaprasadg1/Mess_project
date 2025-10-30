@@ -40,7 +40,6 @@ router.get("/menu", isLoggedIn, isOwner, wrapAsync(renderMenu));
 
 router.post("/menu", isLoggedIn, isOwner, wrapAsync(addedMenu));
 
-// JSON endpoint to fetch current menu data (useful for client-side prefill)
 router.get(
   "/menu/json",
   isLoggedIn,

@@ -51,9 +51,24 @@
           <% if (dish.items && dish.items.length > 0) { %>
           <ul class="list-unstyled mb-0">
             <% dish.items.forEach(it => { %>
-            <li class="d-flex justify-content-between py-1 border-bottom">
-              <span><%= it.name %></span>
-              <span class="fw-semibold">₹ <%= it.price %></span>
+            <li
+              class="d-flex justify-content-between py-1 border-bottom align-items-center"
+            >
+              <div>
+                <span><%= it.name %></span>
+                <% if (it.isLimited) { %>
+                <p class="mb-0 text-danger small">
+                  Limited<% if (it.limitCount) { %> - <%= it.limitCount %>
+                  left<% } %>
+                </p>
+                <% } %>
+              </div>
+              <span class="fw-semibold">
+                <% if (it.price !== null && typeof it.price !== 'undefined') {
+                %> ₹ <%= it.price %> <% } else { %>
+                <span class="text-muted small">Not for getting again</span>
+                <% } %>
+              </span>
             </li>
             <% }) %>
           </ul>
@@ -95,9 +110,24 @@
           <% if (dish.items && dish.items.length > 0) { %>
           <ul class="list-unstyled mb-0">
             <% dish.items.forEach(it => { %>
-            <li class="d-flex justify-content-between py-1 border-bottom">
-              <span><%= it.name %></span>
-              <span class="fw-semibold">₹ <%= it.price %></span>
+            <li
+              class="d-flex justify-content-between py-1 border-bottom align-items-center"
+            >
+              <div>
+                <span><%= it.name %></span>
+                <% if (it.isLimited) { %>
+                <p class="mb-0 text-danger small">
+                  Limited<% if (it.limitCount) { %> - <%= it.limitCount %>
+                  left<% } %>
+                </p>
+                <% } %>
+              </div>
+              <span class="fw-semibold">
+                <% if (it.price !== null && typeof it.price !== 'undefined') {
+                %> ₹ <%= it.price %> <% } else { %>
+                <span class="text-muted small">Not for getting again</span>
+                <% } %>
+              </span>
             </li>
             <% }) %>
           </ul>

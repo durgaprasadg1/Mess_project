@@ -32,7 +32,7 @@
         <li class="nav-item">
           <a class="nav-link nav-link-custom" target="_blank" href="/mess/new">Add Your Mess</a>
         </li>
-        <% if(currentUser && noOfMess > 0){ %>
+        <% if(currentUser && currentUser.mess.length >=1){ %>
         <li class="nav-item">
           <a class="nav-link nav-link-custom" href="/mess/<%= currentUser.mess[0] %>/orders">Orders</a>
         </li>

@@ -19,8 +19,7 @@ const userRouter = require("./router/signin");
 const loginRouter = require("./router/login");
 const orderRouter = require("./router/orders");
 const consumerRouter = require("./router/consumer");
-const webpush = require('web-push')
-
+const webpush = require("web-push");
 
 const app = express();
 const port = 8080;
@@ -42,8 +41,8 @@ webpush.setVapidDetails(
 );
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/MessManagement";
-const dbUrl = MONGO_URL;
-// const dbUrl = process.env.ATLASDB_URL;
+// const dbUrl = MONGO_URL;
+const dbUrl = process.env.ATLASDB_URL;
 mongoose
   .connect(dbUrl)
   .then(() => console.log(" MongoDB Connected"))
@@ -72,13 +71,11 @@ const sessionOption = {
 app.use(session(sessionOption));
 app.use(flash());
 
-
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(Consumer.authenticate()));
 passport.serializeUser(Consumer.serializeUser());
 passport.deserializeUser(Consumer.deserializeUser());
-
 
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
@@ -86,18 +83,19 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   res.locals.noOfMess = req.user?.mess ? req.user.mess.length : 0;
   res.locals.open = true;
+  res.locals.VAPID_PUBLIC = process.env.VAPID_PUBLIC || "";
 
   next();
 });
 
 app.get("/", (req, res) => res.render("home.ejs"));
 
-app.use("/mess", messRouter);          
-app.use("/signup", userRouter);        
-app.use("/login", loginRouter);         
-app.use("/mess/:id", indvMessRouter);   
-app.use("/orders/:id", orderRouter);   
-app.use("/consumer/:id", consumerRouter);  
+app.use("/mess", messRouter);
+app.use("/signup", userRouter);
+app.use("/login", loginRouter);
+app.use("/mess/:id", indvMessRouter);
+app.use("/orders/:id", orderRouter);
+app.use("/consumer/:id", consumerRouter);
 
 app.all("*", (req, res) => {
   res.status(404).render("error/pagenotfound.ejs");
@@ -109,10 +107,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error/error.ejs", { message });
 });
 
-
-  app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-  });
-
-
-
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});

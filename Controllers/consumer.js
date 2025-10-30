@@ -6,7 +6,7 @@ module.exports.showHistory = async (req, res) => {
     let { id } = req.params;
     let consumer = await Consumer.findById(id).populate({
     path: "orders",
-    populate: [
+    populate: [ 
       { path: "mess" },
       { path: "consumer" }   
     ]
